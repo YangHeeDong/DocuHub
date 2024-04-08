@@ -14,7 +14,7 @@
 
 ---
 
-## ☁️ ERD ([링크](https://dbdiagram.io/d/TeamA-devCom_project-65c49ed0ac844320aeb7d9fa))
+## ☁️ ERD ([링크](https://dbdiagram.io/d/660f9c2003593b6b613fa358))
 
 
 
