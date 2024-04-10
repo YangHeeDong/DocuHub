@@ -2,6 +2,7 @@ package com.semi.DocuHub.global.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +19,9 @@ public class ApiSecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
-                                        .requestMatchers("/api/*/articles","/api/*/articles/*").permitAll()
+                                        .requestMatchers(HttpMethod.GET,"/api/*/articles").permitAll()
+                                        .requestMatchers(HttpMethod.GET,"/api/*/articles/*").permitAll()
+                                        .requestMatchers(HttpMethod.POST,"/api/*/members/signup").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable());
