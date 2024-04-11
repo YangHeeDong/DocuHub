@@ -29,4 +29,4 @@ spring:
       initialize-schema: always
 
 custom:
-  fileDirPath: C:\DocuHub\file_upload
+  fileDirPath: D:\DocuHub\file_upload

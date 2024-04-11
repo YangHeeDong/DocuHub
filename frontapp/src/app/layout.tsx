@@ -56,9 +56,9 @@ export default function RootLayout({
           </ul>
         </div>
         <div className="navbar-end gap-2">
-          <Link href="/member/signup" className="btn btn-sm btn-outline btn-info ">회원가입</Link>
-          <Link href="/member/login" className="btn btn-sm btn-outline btn-success ">로그인</Link>
-          <button onClick={handleLogout} className="btn btn-sm btn-outline btn-error ">로그아웃</button>
+          <Link href="/member/signup" className="btn btn-sm btn-ghost ">Sign Up</Link>
+          <Link href="/member/login" className="btn btn-sm btn-ghost ">Sign In</Link>
+          <button onClick={handleLogout} className="btn btn-sm btn-ghost ">Logout</button>
         </div>
       </div>
       <div className="px-24">

@@ -15,7 +15,7 @@ export default function findMember() {
 
   function inputFocus ( inputName:string, index:number ) {
     const inputElement = document.getElementsByName(inputName);
-    inputElement[0]?.focus();
+    inputElement[index]?.focus();
   }
 
 
@@ -84,40 +84,72 @@ export default function findMember() {
     
     <div className="flex justify-center align-center my-auto">
       
-      
-      <div className="card w-96 bg-base-100 shadow-xl mt-3">
-        <div className="card-body">
-          <div className="text-center text-3xl font-bold gap-2">
-            DocuHub
-          </div>
-
-          <div className="mt-5">
-            <label className="input input-bordered flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-              <input type="email" name="email" onChange={handlerChange} className="grow" placeholder="Email" required />
-            </label>
-
-            <button onClick={findId} className="btn w-full mt-2">아이디찾기</button>
-          </div>
+      <div className="card w-96 bg-base-100 shadow-xl mt-10">
+      <div className="card-body">
           
-          <div className="mt-5">
-            <label className="input input-bordered flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-              <input type="text" name="username" onChange={handlerChange} placeholder="Username" required 
-                      className="grow "
-                        />
-            </label>
-
-            <label className="input input-bordered flex items-center mt-2 gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-              <input type="email" name="email" onChange={handlerChange} className="grow" placeholder="Email" required />
-            </label>
-
-            <button onClick={findPassword} className="btn mt-2 w-full">비밀번호 찾기</button>
+          <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
+              <div className="text-3xl font-bold mb-3">DocuHub</div>
+              <div className="text-2xl font-bold ">Find your account</div>
           </div>
-          
 
-        </div>
+          <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="Email" className="block text-sm font-medium leading-6 text-gray-900">
+                  Email
+                </label>
+                <div className="mt-2">
+                  <input type="email" name="email" onChange={handlerChange} required 
+                  className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                </div>
+              </div>
+
+              <button
+                onClick={findId}
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5  text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Find Username
+                </button>
+            </div>
+          </div>
+
+          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="space-y-3">
+
+              <div> 
+                <label htmlFor="Username" className="block text-sm font-medium leading-6 text-gray-900">
+                  Username
+                </label>
+                <div className="mt-2">
+                  <input type="text" name="username" onChange={handlerChange} required
+                  className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="Email" className="block text-sm font-medium leading-6 text-gray-900">
+                  Email
+                </label>
+                <div className="mt-2">
+                  <input type="email" name="email" onChange={handlerChange} required 
+                  className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                </div>
+              </div>
+
+              <button
+                onClick={findPassword}
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Find Password
+                </button>
+            </div>
+          </div>
+            <p className="mt-8 text-center text-sm text-gray-500">
+              <a href="/member/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                Sign in to DocuHub
+              </a>
+            </p>
+      </div>
 
       </div>
     </div>
