@@ -42,19 +42,21 @@ export default function login() {
 
     const response = await fetch("http://localhost:8010/api/v1/members/login",{
       method:"POST",
-      // credentials: 'include', // 클라이언트와 서버가 통신할때 쿠키 값을 공유하겠다는 설정
+      credentials: 'include', // 클라이언트와 서버가 통신할때 쿠키 값을 공유하겠다는 설정
       headers:{'Content-Type':"application/json"},
       body:JSON.stringify(login)
     }).then(res => res.json());
 
-    alert(response.msg);
+    console.log(response);
+
+    // alert(response.msg);
 
     if(response.isFail){
       inputFocus(response.data);
       return;
     }
 
-    router.push("/");
+    // router.push("/");
 
   }
 

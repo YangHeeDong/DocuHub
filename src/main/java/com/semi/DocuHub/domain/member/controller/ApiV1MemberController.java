@@ -38,7 +38,7 @@ public class ApiV1MemberController {
     }
 
     @PostMapping("/login")
-    public RsData login(@Valid @RequestBody MemberRequest.LoginReq loginReq, BindingResult br){
+    public RsData login(@Valid @RequestBody MemberRequest.LoginReq loginReq, BindingResult br) throws Exception {
 
         if(br.hasErrors()){
             return RsData.of("F-1","로그인 정보를 알맞게 입력해 주세요.");
@@ -59,13 +59,7 @@ public class ApiV1MemberController {
         SecurityUser securityUser = memberService.getUserFromAccessToken(result.getData().getAccessToken());
         rq.setLogin(securityUser);
 
-        return RsData.of(
-                result.getResultCode(),
-                result.getMsg(),
-                new LoginRes(
-                        new MemberDto(result.getData().getMember())
-                )
-        );
+        return result;
     }
 
 }
