@@ -27,3 +27,6 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+
+custom:
+  fileDirPath: C:\DocuHub\file_upload

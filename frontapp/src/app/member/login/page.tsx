@@ -1,5 +1,6 @@
 'use client';
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -49,14 +50,14 @@ export default function login() {
 
     console.log(response);
 
-    // alert(response.msg);
+    alert(response.msg);
 
     if(response.isFail){
       inputFocus(response.data);
       return;
     }
 
-    // router.push("/");
+    router.push("/");
 
   }
 
@@ -80,8 +81,17 @@ export default function login() {
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" /></svg>
             <input type="password" name="password" onChange={handlerChange} className="grow" placeholder="Password" required />
           </label>
+          
+          
+          <button onClick={doSubmmit} className="btn btn-outline btn-success btn-sm ps-5 pe-5">로그인</button>
 
-          <button onClick={doSubmmit} className="btn">로그인</button>
+          <div className="flex justify-between">
+            
+            <Link href="/member/findMember" className="btn btn-outline btn-info btn-sm">ID/PW 찾기</Link>
+            <Link href="/member/signup" className="btn btn-outline btn-info btn-sm">회원가입</Link>
+            
+          </div>
+          
         </div>
       </div>
       

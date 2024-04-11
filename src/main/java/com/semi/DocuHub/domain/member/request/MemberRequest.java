@@ -34,4 +34,23 @@ public class MemberRequest {
         public String password;
     }
 
+    @Getter
+    public static class FindIdReq {
+
+        @NotBlank
+        public String email;
+
+    }
+
+    @Getter
+    public static class FindPasswordReq {
+
+        @NotBlank
+        public String username;
+
+        @NotBlank
+        public String email;
+
+    }
+
 }

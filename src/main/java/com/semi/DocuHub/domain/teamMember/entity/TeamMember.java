@@ -1,9 +1,11 @@
-package com.semi.DocuHub.domain.article.entity;
+package com.semi.DocuHub.domain.teamMember.entity;
 
-import com.semi.DocuHub.domain.articleCategory.entity.ArticleCategory;
+import com.semi.DocuHub.domain.member.entity.Member;
+import com.semi.DocuHub.domain.team.entity.Team;
 import com.semi.DocuHub.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +16,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class Article extends BaseEntity {
+public class TeamMember extends BaseEntity {
 
     @ManyToOne
-    private ArticleCategory articleCategory;
+    private Team team;
 
-    private String title;
-    private String content;
-    private Long View;
+    @ManyToOne
+    private Member teamMember;
+
 
 }

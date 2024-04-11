@@ -29,12 +29,30 @@ public class ApiSecurityConfig {
                                 authorizeHttpRequests
                                         .requestMatchers(HttpMethod.GET,"/api/*/articles").permitAll()
                                         .requestMatchers(HttpMethod.GET,"/api/*/articles/*").permitAll()
+                                        //회원가입
                                         .requestMatchers(HttpMethod.POST,"/api/*/members/signup").permitAll()
+                                        //로그인
                                         .requestMatchers(HttpMethod.POST,"/api/*/members/login").permitAll()
+                                        //로그아웃
+                                        .requestMatchers(HttpMethod.POST,"/api/*/members/logout").permitAll()
+                                        //아이디 찾기
+                                        .requestMatchers(HttpMethod.POST,"/api/*/members/findId").permitAll()
+                                        //비밀번호 찾기
+                                        .requestMatchers(HttpMethod.POST,"/api/*/members/findPassword").permitAll()
+
                                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class); // 폼 로그인 방식 끄기;
+                .httpBasic(
+                        httpBasic -> httpBasic.disable()
+                ) // httpBasic 로그인 방식 끄기
+                .formLogin(
+                        formLogin -> formLogin.disable()
+                ) // 폼 로그인 방식 끄기
+                .sessionManagement(
+                        sessionManagement -> sessionManagement.disable()
+                ) // filter 추가
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

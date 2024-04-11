@@ -5,14 +5,30 @@ import { useState } from "react";
 
 export default function signup() {
 
-  const [signup,setSignup] = useState({username:"",password:"",passwordConfirm:"",email:""})
+
+  const [signup,setSignup] = useState({username:"",password:"",passwordConfirm:"",email:"",profileImg:""})
   const router = useRouter();
 
   const handlerChange = (e) => {
 
     const {name, value} = e.target;
     setSignup({...signup,[name]:value});
+    
+  }
 
+  const handlerImg = (e) => {
+    
+    var file = e.target.files[0];
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('preview')?.setAttribute("src",e.target.result);
+    }
+    reader.readAsDataURL(file);
+
+    setSignup({...signup,profileImg:file});
+
+    console.log(signup);
   }
 
   function inputFocus ( inputName:string ) {
@@ -59,17 +75,27 @@ export default function signup() {
     return true;
   }
 
-  const doSubmmit = async () => {
+  const doSubmmit = async (e) => {
 
+    e.preventDefault();
+    
     if(inputValid() == false){
+      e.stopPropagation();
       return;
     }
+
+    const formData = new FormData();
+    formData.append('username', signup.username);
+    formData.append('password', signup.password);
+    formData.append('passwordConfirm', signup.passwordConfirm);
+    formData.append('email', signup.email);
+    formData.append("profileImg",  signup.profileImg);
 
     const response = await fetch("http://localhost:8010/api/v1/members/signup",{
       method:"POST",
       // credentials: 'include', // 클라이언트와 서버가 통신할때 쿠키 값을 공유하겠다는 설정
-      headers:{'Content-Type':"application/json"},
-      body:JSON.stringify(signup)
+      // headers:{"Content-Type": "multipart/form-data"},
+      body:formData
     }).then(res => res.json());
 
     alert(response.msg);
@@ -79,7 +105,7 @@ export default function signup() {
       return;
     }
 
-    router.push("/");
+    // router.push("/");
 
   }
 
@@ -92,6 +118,7 @@ export default function signup() {
           <div className="text-center text-3xl font-bold gap-2">
             DocuHub
           </div>
+          
           <label className="input input-bordered flex items-center gap-2 ">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
             <input type="text" name="username" onChange={handlerChange} placeholder="Username" required 
@@ -113,6 +140,19 @@ export default function signup() {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
             <input type="email" name="email" onChange={handlerChange} className="grow" placeholder="Email" required />
           </label>
+
+          <div className="flex">
+            
+            <div className="w-3/12 flex justify-center items-center">
+              <img className="h-16 w-16 object-cover rounded-full" id="preview" src="" alt="Current profile photo" />
+            </div>
+            
+            <div className="w-9/12 flex items-center ">
+              <input type="file" className="file-input file-input-bordered w-full max-w-xs"
+              name="profileImg" id="profileImg" onChange={handlerImg} accept="image/gif,image/jpeg,image/png" />    
+            </div>
+            
+          </div>
 
           <button onClick={doSubmmit} className="btn">회원가입</button>
         </div>

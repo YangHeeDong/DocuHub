@@ -23,17 +23,17 @@ public class NotProd {
                     .username("user1")
                     .password("1234")
                     .passwordConfirm("1234")
-                    .email("user1@gmail.com").build());
+                    .email("user1@gmail.com").build(),null);
             RsData<Member> user2 = memberService.save(MemberRequest.SignupReq.builder()
                     .username("user2")
                     .password("1234")
                     .passwordConfirm("1234")
-                    .email("user2@gmail.com").build());
+                    .email("user2@gmail.com").build(),null);
             RsData<Member> admin = memberService.save(MemberRequest.SignupReq.builder()
                     .username("admin")
                     .password("1234")
                     .passwordConfirm("1234")
-                    .email("admin@gmail.com").build());
+                    .email("admin@gmail.com").build(),null);
 
 
             // 작성자 회원 추가

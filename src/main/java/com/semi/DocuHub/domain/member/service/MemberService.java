@@ -1,9 +1,11 @@
 package com.semi.DocuHub.domain.member.service;
 
+import com.semi.DocuHub.domain.image.service.ImageService;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.member.repository.MemberRepository;
 import com.semi.DocuHub.domain.member.request.MemberRequest;
 import com.semi.DocuHub.domain.member.response.MemberResponse;
+import com.semi.DocuHub.global.email.EmailService;
 import com.semi.DocuHub.global.jwt.JwtProvider;
 import com.semi.DocuHub.global.rsData.RsData;
 import com.semi.DocuHub.global.security.SecurityUser;
@@ -11,10 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +28,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final EmailService emailService;
+    private final ImageService imageService;
 
-    public RsData save(MemberRequest.SignupReq signupReq) {
+    public RsData save(MemberRequest.SignupReq signupReq, MultipartFile profileImg) throws IOException {
 
         RsData valid = validation(signupReq);
 
@@ -45,6 +52,8 @@ public class MemberService {
         member = member.toBuilder().refreshToken(refreshToken).build();
 
         memberRepository.save(member);
+
+        imageService.saveMemberProfile(member,profileImg);
 
         return RsData.of("S-1","가입성공",member);
     }
@@ -109,4 +118,33 @@ public class MemberService {
         return RsData.of("S-1", "토큰 갱신 성공", accessToken);
     }
 
+    public RsData findIdByEmail(String email) {
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        return member.map(value -> RsData.of("S-1", "회원님의 아이디는 " + value.getUsername() + " 입니다.")).orElseGet(() -> RsData.of("F-1", "가입되지 않은 이메일 입니다."));
+
+    }
+
+    public RsData findPassword(MemberRequest.FindPasswordReq req) {
+
+        Optional<Member> member = memberRepository.findByUsername(req.getUsername());
+
+        if(member.isEmpty()){
+            return RsData.of("F-1", "가입되지 아이디 입니다.");
+        }
+        if(!member.get().getEmail().equals(req.email)){
+            return RsData.of("F-1", "이메일이 일치하지 않습니다.");
+        }
+
+        // 임시 비밀번호 전송
+        String tempPassword = emailService.sendConfirm(member.get().getEmail());
+
+        // 비밀번호 변경
+        Member updateMember = member.get().toBuilder().password(passwordEncoder.encode(tempPassword)).build();
+        memberRepository.save(updateMember);
+
+        return RsData.of("S-1","회원님의 이메일로 임시비밀번호를 발급하였습니다.");
+
+    }
 }
