@@ -9,6 +9,7 @@ import com.semi.DocuHub.global.email.EmailService;
 import com.semi.DocuHub.global.jwt.JwtProvider;
 import com.semi.DocuHub.global.rsData.RsData;
 import com.semi.DocuHub.global.security.SecurityUser;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,7 @@ public class MemberService {
     private final EmailService emailService;
     private final ImageService imageService;
 
+    @Transactional
     public RsData save(MemberRequest.SignupReq signupReq, MultipartFile profileImg) throws IOException {
 
         RsData valid = validation(signupReq);
@@ -78,17 +80,21 @@ public class MemberService {
 
     public RsData authAndMakeTokens(MemberRequest.LoginReq loginReq) throws Exception {
 
-        Member member = memberRepository.findByUsername(loginReq.username).orElseThrow(() -> new Exception("존재하지 않는 회원"));
+        Optional<Member> member = memberRepository.findByUsername(loginReq.username);
 
-        if(!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())){
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+        if(member.isEmpty()){
+            return RsData.of("F-1","존재하지 않는 회원 입니다.");
         }
 
-        String refreshToken = member.getRefreshToken();
+        if(!passwordEncoder.matches(loginReq.getPassword(), member.get().getPassword())){
+            return RsData.of("F-2","비밀번호가 일치하지 않습니다.");
+        }
 
-        String accessToken = jwtProvider.genAccessToken(member);
+        String refreshToken = member.get().getRefreshToken();
 
-        return RsData.of("S-1","로그인 성공",new MemberResponse.LoginRes(member,accessToken,refreshToken));
+        String accessToken = jwtProvider.genAccessToken(member.get());
+
+        return RsData.of("S-1","로그인 성공",new MemberResponse.LoginRes(member.get(),accessToken,refreshToken));
     }
 
     public SecurityUser getUserFromAccessToken(String accessToken) {
@@ -134,7 +140,7 @@ public class MemberService {
             return RsData.of("F-1", "가입되지 아이디 입니다.");
         }
         if(!member.get().getEmail().equals(req.email)){
-            return RsData.of("F-1", "이메일이 일치하지 않습니다.");
+            return RsData.of("F-2", "이메일이 일치하지 않습니다.");
         }
 
         // 임시 비밀번호 전송

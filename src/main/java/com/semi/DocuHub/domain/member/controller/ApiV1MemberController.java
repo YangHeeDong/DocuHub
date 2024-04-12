@@ -31,7 +31,7 @@ public class ApiV1MemberController {
     private final Rq rq;
 
     @PostMapping("/signup")
-    public RsData signup(MemberRequest.SignupReq signupReq, BindingResult br, @RequestParam(name = "profileImg", required = false) MultipartFile profileImg) throws IOException {
+    public RsData signup(@Valid MemberRequest.SignupReq signupReq, BindingResult br, @RequestParam(name = "profileImg", required = false) MultipartFile profileImg) throws IOException {
 
         if(br.hasErrors()){
             return RsData.of("F-1","가입 정보를 알맞게 입력해 주세요.");

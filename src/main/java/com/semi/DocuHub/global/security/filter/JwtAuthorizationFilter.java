@@ -29,7 +29,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
 
-        if(request.getRequestURI().equals("/api/v1/members/login") || request.getRequestURI().equals("/api/v1/members/logout")){
+        if(
+                request.getRequestURI().equals("/api/v1/members/login") ||
+                request.getRequestURI().equals("/api/v1/members/logout") ||
+                request.getRequestURI().equals("/api/v1/members/findId") ||
+                request.getRequestURI().equals("/api/v1/members/findPassword") ||
+                request.getRequestURI().equals("/api/v1/members/signup")
+        ){
             filterChain.doFilter(request,response);
             return;
         }

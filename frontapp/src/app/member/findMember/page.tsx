@@ -1,5 +1,6 @@
 'use client';
 
+import api from "@/app/utils/api";
 import { useState } from "react";
 
 export default function findMember() {
@@ -38,13 +39,14 @@ export default function findMember() {
       return false;
     }
 
-    const response = await fetch("http://localhost:8010/api/v1/members/findId",{
-      method:"POST",
-      headers:{'Content-Type':"application/json"},
-      body:JSON.stringify(info)
-    }).then(res => res.json());
+   await api.post("/api/v1/members/findId",info)
+    .then(
+      res => (alert(res.data.msg))
+    )
+    .catch(function (error) {
+      console.log(error);
+    });
 
-    alert(response.msg);
   }
 
   const findPassword = async () => {
@@ -71,20 +73,21 @@ export default function findMember() {
       return false;
     }
 
-    const response = await fetch("http://localhost:8010/api/v1/members/findPassword",{
-      method:"POST",
-      headers:{'Content-Type':"application/json"},
-      body:JSON.stringify(info)
-    }).then(res => res.json());
+    await api.post("/api/v1/members/findPassword",info)
+    .then(
+      res => (alert(res.data.msg))
+    )
+    .catch(function (error) {
+      console.log(error);
+    });
 
-    alert(response.msg);
   }
 
   return (
     
-    <div className="flex justify-center align-center my-auto">
+    <div className="px-24 flex justify-center align-center my-auto">
       
-      <div className="card w-96 bg-base-100 shadow-xl mt-10">
+      <div className="card w-96 bg-base-100 shadow-xl">
       <div className="card-body">
           
           <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">

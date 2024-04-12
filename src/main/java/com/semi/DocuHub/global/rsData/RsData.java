@@ -1,7 +1,11 @@
 package com.semi.DocuHub.global.rsData;
 
+import com.semi.DocuHub.domain.team.dto.TeamDto;
+import com.semi.DocuHub.domain.team.response.TeamResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor

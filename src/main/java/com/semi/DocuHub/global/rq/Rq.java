@@ -28,6 +28,7 @@ public class Rq {
     private final EntityManager entityManager;
     private Member member;
 
+
     public void setCrossDomainCookie (String name, String value) {
 
         ResponseCookie cookie = ResponseCookie.from(name, value)

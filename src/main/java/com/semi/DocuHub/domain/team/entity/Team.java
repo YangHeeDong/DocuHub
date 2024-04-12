@@ -1,12 +1,10 @@
 package com.semi.DocuHub.domain.team.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.teamMember.entity.TeamMember;
 import com.semi.DocuHub.global.jpa.BaseEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,8 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class Team extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Member teamAdmin;
 
     private String teamName;

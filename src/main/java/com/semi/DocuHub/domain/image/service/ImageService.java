@@ -3,7 +3,9 @@ package com.semi.DocuHub.domain.image.service;
 import com.semi.DocuHub.domain.image.entity.Image;
 import com.semi.DocuHub.domain.image.repository.ImageRepository;
 import com.semi.DocuHub.domain.member.entity.Member;
+import com.semi.DocuHub.domain.team.entity.Team;
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,13 @@ public class ImageService {
     @Value("${custom.fileDirPath}")
     private String fileDirPath;
 
+
+    @Transactional
+    public Image getImage(String relationEntity, Long relationId)  {
+        return imageRepository.findByRelationEntityAndRelationId(relationEntity, relationId).orElseGet(null);
+    }
+
+    @Transactional
     public void saveMemberProfile(Member member,@Nullable MultipartFile profileImg) throws IOException {
 
         String filePath = "";
@@ -36,7 +45,7 @@ public class ImageService {
             createFolder("user");
 
             originalFileName = profileImg.getOriginalFilename();
-            filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            filePath = "member/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
             File profileImgFile = new File(fileDirPath + "/" + filePath);
             profileImg.transferTo(profileImgFile);
             filePath = "/file/" + filePath;
@@ -47,6 +56,7 @@ public class ImageService {
         this.imageRepository.save(userProfile);
     }
 
+    @Transactional
     public void createFolder(String folderName) {
 
         File folder = new File(fileDirPath + "\\" + folderName + "\\");
@@ -61,4 +71,29 @@ public class ImageService {
         }
     }
 
+    @Transactional
+    public void saveTeamImg(Team team, MultipartFile teamImg) throws IOException {
+
+        String filePath = "";
+        String originalFileName = "";
+
+        if (teamImg == null) {
+            filePath = "/img/kakako-00.jpg";
+            originalFileName = "defaultImage";
+        } else if (!teamImg.isEmpty()) {
+
+            createFolder("team");
+
+            originalFileName = teamImg.getOriginalFilename();
+            filePath = "team/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            File profileImgFile = new File(fileDirPath + "/" + filePath);
+            teamImg.transferTo(profileImgFile);
+            filePath = "/file/" + filePath;
+        }
+
+        Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(team.getId()).relationEntity("team").build();
+
+        this.imageRepository.save(userProfile);
+
+    }
 }

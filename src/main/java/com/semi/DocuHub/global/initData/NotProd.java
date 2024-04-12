@@ -3,18 +3,28 @@ package com.semi.DocuHub.global.initData;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.member.request.MemberRequest;
 import com.semi.DocuHub.domain.member.service.MemberService;
+import com.semi.DocuHub.domain.team.request.TeamRequest;
+import com.semi.DocuHub.domain.team.service.TeamService;
+import com.semi.DocuHub.global.rq.Rq;
 import com.semi.DocuHub.global.rsData.RsData;
+import com.semi.DocuHub.global.security.SecurityUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.ArrayList;
 
 @Configuration
 @Profile({"dev", "test"})
 public class NotProd {
 
     @Bean
-    CommandLineRunner initData(MemberService memberService) {
+    CommandLineRunner initData(MemberService memberService, TeamService teamService) {
 
         return args -> {
 
@@ -34,6 +44,9 @@ public class NotProd {
                     .password("1234")
                     .passwordConfirm("1234")
                     .email("admin@gmail.com").build(),null);
+
+
+
 
 
             // 작성자 회원 추가

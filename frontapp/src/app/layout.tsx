@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className="navbar bg-base-100">
+      <div className="navbar bg-base-100 absolute">
         <div className="navbar-start">
           
           <a className="btn btn-ghost text-2xl font-bold">DocuHub</a>
@@ -43,6 +43,7 @@ export default function RootLayout({
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li><a href="/team">Team</a></li>
+            <li><a href="/article">Article</a></li>
             <li>
               <details>
                 <summary>Parent</summary>
@@ -52,17 +53,19 @@ export default function RootLayout({
                 </ul>
               </details>
             </li>
-            <li><a>Item 3</a></li>
           </ul>
         </div>
-        <div className="navbar-end gap-2">
+        <div className="navbar-end me-2">
           <Link href="/member/signup" className="btn btn-sm btn-ghost ">Sign Up</Link>
           <Link href="/member/login" className="btn btn-sm btn-ghost ">Sign In</Link>
           <button onClick={handleLogout} className="btn btn-sm btn-ghost ">Logout</button>
         </div>
       </div>
-      <div className="px-24">
+      <div className="h-screen">
+        <div className="pt-20">
         {children}
+        </div>
+        
       </div>
         
       </body>
