@@ -153,4 +153,9 @@ public class MemberService {
         return RsData.of("S-1","회원님의 이메일로 임시비밀번호를 발급하였습니다.");
 
     }
+
+    public Member findById(Long id){
+        return memberRepository.findById(id).orElseGet(null);
+    }
+
 }

@@ -20,10 +20,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class TeamMember extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Team team;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Member teamMember;
 
 

@@ -10,8 +10,13 @@ import com.semi.DocuHub.domain.teamMember.repository.TeamMemberRepository;
 import com.semi.DocuHub.global.rq.Rq;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,14 +39,17 @@ public class TeamMemberService {
 
     }
 
-    public List<TeamDto> getTeam(Member teamMember) {
+    public Page<TeamDto> getTeamsByMember(Member teamMember,int page) {
 
-        List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeamMember(teamMember);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
 
-        List<TeamDto> teamList = teamMemberList.stream().map(tm -> {
+        Pageable pageable = PageRequest.of(page, 8, Sort.by(sorts));
+
+        Page<TeamMember> teamMemberList = teamMemberRepository.findAllByTeamMember(teamMember,pageable);
+
+        return teamMemberList.map(tm -> {
             return new TeamDto(tm.getTeam(),imageService.getImage("team",tm.getTeam().getId()));
-        }).toList();
-
-        return teamList;
+        });
     }
 }

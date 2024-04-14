@@ -13,6 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 public class TeamDto {
 
+    private Long id;
+
+    private Member teamAdmin;
+
     private String teamName;
 
     private String teamDescription;
@@ -22,9 +26,19 @@ public class TeamDto {
     private Image teamImg;
 
     public TeamDto(Team team, Image teamImg) {
+        this.id = team.getId();
+        this.teamAdmin = team.getTeamAdmin();
         this.teamName = team.getTeamName();
         this.teamDescription = team.getTeamDescription();
         this.teamMemberList = team.getTeamMemberList().stream().map(TeamMember::getTeamMember).toList();
         this.teamImg = teamImg;
+    }
+
+    public TeamDto(Team team) {
+        this.id = team.getId();
+        this.teamAdmin = team.getTeamAdmin();
+        this.teamName = team.getTeamName();
+        this.teamDescription = team.getTeamDescription();
+        this.teamImg = null;
     }
 }

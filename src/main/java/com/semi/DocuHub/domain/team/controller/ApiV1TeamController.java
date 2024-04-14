@@ -8,6 +8,7 @@ import com.semi.DocuHub.domain.team.service.TeamService;
 import com.semi.DocuHub.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ApiV1TeamController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public RsData<Team> create (@Valid TeamRequest.TeamCreateReq req, BindingResult br, @RequestParam(name = "teamImg", required = false) MultipartFile teamImg) {
+    public RsData<TeamDto> create (@Valid TeamRequest.TeamCreateReq req, BindingResult br, @RequestParam(name = "teamImg", required = false) MultipartFile teamImg) {
 
         if(br.hasErrors()){
             return RsData.of("F-1","팀 생성 정보를 알맞게 입력해 주세요");
@@ -34,14 +35,15 @@ public class ApiV1TeamController {
 
         if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg());
 
-        return RsData.of(result.getResultCode(), result.getMsg(), result.getData() );
+        return RsData.of(result.getResultCode(), result.getMsg(), new TeamDto(result.getData()) );
     }
 
     @GetMapping("/getTeams")
     @PreAuthorize("isAuthenticated()")
-    public RsData<TeamResponse.GetTeamsRes> getTeams () {
+    public RsData<TeamResponse.GetTeamsRes> getTeams ( @RequestParam(value="page", defaultValue="0") int page ) {
 
-        RsData<List<TeamDto>> result = teamService.getTeams();
+        RsData<Page<TeamDto>> result = teamService.getTeams(page);
+
 
         return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamsRes(result.getData()));
     }

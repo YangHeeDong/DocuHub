@@ -13,6 +13,7 @@ import com.semi.DocuHub.global.rsData.RsData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,13 +59,13 @@ public class TeamService {
     }
 
 
-    public RsData<List<TeamDto>> getTeams() {
+    public RsData<Page<TeamDto>> getTeams(int page) {
 
         Member teamMember = rq.getMember();
 
-        List<TeamDto> teamList = teamMemberService.getTeam(teamMember);
+        Page<TeamDto> teams = teamMemberService.getTeamsByMember(teamMember,page);
 
-        return RsData.of("","",teamList);
+        return RsData.of("","",teams);
 
     }
 }

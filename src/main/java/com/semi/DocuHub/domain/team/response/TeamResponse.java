@@ -4,6 +4,7 @@ import com.semi.DocuHub.domain.team.dto.TeamDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class TeamResponse {
     @NoArgsConstructor
     public static class GetTeamsRes {
 
-        List<TeamDto> teams;
+        Page<TeamDto> teams;
 
     }
 

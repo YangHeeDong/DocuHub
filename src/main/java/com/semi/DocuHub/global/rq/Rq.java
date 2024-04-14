@@ -1,12 +1,14 @@
 package com.semi.DocuHub.global.rq;
 
 import com.semi.DocuHub.domain.member.entity.Member;
+import com.semi.DocuHub.domain.member.service.MemberService;
 import com.semi.DocuHub.global.security.SecurityUser;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -25,7 +27,9 @@ public class Rq {
     private final HttpServletRequest req;
     private final HttpServletResponse res;
 
-    private final EntityManager entityManager;
+//    private final EntityManager entityManager;
+
+    private final MemberService memberService;
     private Member member;
 
 
@@ -101,7 +105,8 @@ public class Rq {
 
         if (member == null) {
 
-            member = entityManager.getReference(Member.class,  getUser().getId());
+            member = memberService.findById(getUser().getId());
+//                    entityManager.getReference(Member.class,  getUser().getId());
         }
 
         return member;

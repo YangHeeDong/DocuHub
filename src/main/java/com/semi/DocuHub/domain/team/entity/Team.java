@@ -1,6 +1,6 @@
 package com.semi.DocuHub.domain.team.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.teamMember.entity.TeamMember;
 import com.semi.DocuHub.global.jpa.BaseEntity;
@@ -19,8 +19,8 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class Team extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @ManyToOne
+    @JsonBackReference
     private Member teamAdmin;
 
     private String teamName;
