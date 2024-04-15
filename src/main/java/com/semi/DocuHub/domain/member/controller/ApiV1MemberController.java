@@ -1,6 +1,7 @@
 package com.semi.DocuHub.domain.member.controller;
 
 import com.semi.DocuHub.domain.image.service.ImageService;
+import com.semi.DocuHub.domain.member.dto.MemberDto;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.member.request.MemberRequest;
 import com.semi.DocuHub.domain.member.response.MemberResponse;
@@ -29,6 +30,16 @@ public class ApiV1MemberController {
     private final MemberService memberService;
 
     private final Rq rq;
+
+    @GetMapping("/me")
+    public RsData<MemberDto> signup() {
+
+        if(rq.isLogout()){
+            return RsData.of("F-1","로그인안됨");
+        }
+
+        return RsData.of("S-1","로그인됨",new MemberDto(rq.getMember()));
+    }
 
     @PostMapping("/signup")
     public RsData signup(@Valid MemberRequest.SignupReq signupReq, BindingResult br, @RequestParam(name = "profileImg", required = false) MultipartFile profileImg) throws IOException {

@@ -48,5 +48,16 @@ public class ApiV1TeamController {
         return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamsRes(result.getData()));
     }
 
+    @GetMapping("/getTeam/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public RsData<TeamResponse.GetTeamRes> getTeam ( @PathVariable(name = "id") Long id ) {
+
+        RsData<TeamDto> result = teamService.getTeamById(id);
+
+        if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg());
+
+        return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamRes(result.getData()));
+    }
+
 
 }

@@ -85,7 +85,7 @@ export default function findMember() {
 
   return (
     
-    <div className="px-24 flex justify-center align-center my-auto">
+    <div className="px-36 flex justify-center align-center my-auto">
       
       <div className="card w-96 bg-base-100 shadow-xl">
       <div className="card-body">

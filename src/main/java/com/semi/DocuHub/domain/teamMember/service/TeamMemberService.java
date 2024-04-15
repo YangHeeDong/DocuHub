@@ -28,11 +28,12 @@ public class TeamMemberService {
     private final Rq rq;
 
     @Transactional
-    public void create(Team team) {
+    public void create(Team team, String authority) {
 
         TeamMember teamMember = TeamMember.builder()
                 .teamMember(rq.getMember())
                 .team(team)
+                .authority(authority)
                 .build();
 
         teamMemberRepository.save(teamMember);

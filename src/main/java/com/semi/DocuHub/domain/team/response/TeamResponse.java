@@ -20,4 +20,13 @@ public class TeamResponse {
 
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetTeamRes {
+
+        TeamDto team;
+
+    }
+
 }

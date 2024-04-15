@@ -39,7 +39,8 @@ public class ApiSecurityConfig {
                                         .requestMatchers(HttpMethod.POST,"/api/*/members/findId").permitAll()
                                         //비밀번호 찾기
                                         .requestMatchers(HttpMethod.POST,"/api/*/members/findPassword").permitAll()
-
+                                        // 로그인 되어있는지
+                                        .requestMatchers(HttpMethod.POST,"/api/*/members/me").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

@@ -73,7 +73,7 @@ export default function team() {
 
   return (
     
-    <div className="px-24 flex justify-center align-center my-auto">
+    <div className="px-36 flex justify-center align-center my-auto">
       
       <div className="card size-full bg-base-100 shadow-xl mb-5 mt-3">
         <div className="flex border-b-2 py-3">
@@ -88,7 +88,7 @@ export default function team() {
       <div className="card-body">
         <div className="grid grid-cols-4 gap-6">
         {teams && teams.content.map(team => (
-          <a href="#" key={team.id} className="card bg-base-100 shadow-xl">
+          <a href={"/team/"+team.id} key={team.id} className="card bg-base-100 shadow-xl">
             <figure><img src={team.teamImg.path} className="w-full h-40 object-contain bg-slate-200" alt={team.teamImg.originalFileName} /></figure>
             <div className="card-body">
               <h2 className="card-title truncate">{team?.teamName}</h2>

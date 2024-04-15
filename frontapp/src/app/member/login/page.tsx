@@ -1,7 +1,6 @@
 'use client';
 
-import api from "@/app/utils/api";
-import axios from "axios";
+import useRq from "@/app/utils/rq";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -9,6 +8,7 @@ export default function login() {
 
   const [login,setLogin] = useState({username:"",password:""})
   const router = useRouter();
+  const rq= useRq();
 
   const handlerChange = (e) => {
 
@@ -37,46 +37,16 @@ export default function login() {
   }
 
   const doSubmmit = async () => {
-
+    
     if(inputValid() == false){
       return;
     }
-
-    // const response = await fetch("http://localhost:8010/api/v1/members/login",{
-    //   method:"POST",
-    //   credentials: 'include', // 클라이언트와 서버가 통신할때 쿠키 값을 공유하겠다는 설정
-    //   headers:{'Content-Type':"application/json"},
-    //   body:JSON.stringify(login)
-    // }).then(res => res.json());
-    // console.log(response);
-    // alert(response.msg);
-    // if(response.isFail){
-    //   inputFocus(response.data);
-    //   return;
-    // }
-
-    await api.post("/api/v1/members/login",login)
-    .then(
-      res => {
-        alert(res.data.msg)
-
-        if(res.data.isFail){
-          inputFocus(res.data.data);
-          return;
-        }
-        // router.push("/");
-      }
-    )
-    .catch(function (error) {
-      console.log(error);
-    });
-    
-
+    await rq.setLogined(login.username,login.password);
   }
 
   return (
     
-    <div className="px-24 flex h-fit justify-center align-center my-auto">
+    <div className="px-36 flex h-fit justify-center align-center my-auto">
 
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">

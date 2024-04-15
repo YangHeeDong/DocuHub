@@ -110,7 +110,7 @@ export default function signup() {
 
   return (
     
-    <div className="px-24 flex h-100 justify-center align-center my-auto">
+    <div className="px-36 flex h-100 justify-center align-center my-auto">
 
 <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">

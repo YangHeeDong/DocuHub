@@ -112,11 +112,11 @@ public class Rq {
         return member;
     }
 
-    private boolean isLogout() {
+    public boolean isLogout() {
         return !isLogin();
     }
 
-    private boolean isLogin() {
+    public boolean isLogin() {
         return getUser() != null;
     }
     private SecurityUser getUser() {

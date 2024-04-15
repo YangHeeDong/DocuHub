@@ -1,5 +1,6 @@
 package com.semi.DocuHub.domain.team.service;
 
+import com.semi.DocuHub.domain.image.entity.Image;
 import com.semi.DocuHub.domain.image.service.ImageService;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.team.dto.TeamDto;
@@ -46,7 +47,7 @@ public class TeamService {
 
         imageService.saveTeamImg(team, teamImg);
 
-        teamMemberService.create(team);
+        teamMemberService.create(team,"admin");
 
         return RsData.of("S-1","팀을 생성하였습니다.",team);
     }
@@ -66,6 +67,26 @@ public class TeamService {
         Page<TeamDto> teams = teamMemberService.getTeamsByMember(teamMember,page);
 
         return RsData.of("","",teams);
+
+    }
+
+    public RsData<TeamDto> getTeamById(Long id) {
+
+        Team team = teamRepository.findById(id).orElseGet(null);
+
+        if(team == null){
+            return RsData.of("F-1","존재하지 않는 팀입니다.");
+        }
+
+        TeamMember tm = team.getTeamMemberList().stream().filter(teamMember -> teamMember.getTeamMember() == rq.getMember()).findFirst().orElse(null);
+
+        if(tm == null){
+            return RsData.of("F-2","잘못된 접근 입니다.");
+        }
+
+        Image teamImg = imageService.getImage("team",team.getId());
+
+        return RsData.of("S-1","팀 조회 성공",new TeamDto(team,teamImg));
 
     }
 }
