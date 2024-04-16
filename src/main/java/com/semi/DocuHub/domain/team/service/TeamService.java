@@ -93,4 +93,5 @@ public class TeamService {
         return RsData.of("S-1","팀 조회 성공",new TeamDto(team,teamImg));
 
     }
+
 }

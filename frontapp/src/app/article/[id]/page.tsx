@@ -2,9 +2,8 @@
 
 import api from "@/app/utils/api";
 import { TrashIcon } from "@heroicons/react/20/solid";
-import {  } from "@heroicons/react/24/outline";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -15,74 +14,84 @@ export default function articleDetail() {
   const id = useParams().id;
   
   const router = useRouter();
+  const [member, setMember] = useState({id:0, username:""});
+  
 
-  const [article, setArticle] = useState({});
-  const textRef = React.createRef();
+  const [article, setArticle] = useState(null);
+  const textRef = useRef<Editor>(null);
+
 
   const [stompClient, setStompClient] = useState<Client | null>(null);
   
-  const handleChangeInput = () => {
+  const handleChangeInput =  () => {
     const html = textRef.current?.getInstance().getMarkdown();
-    setArticle({...article,"content":html});
-    console.log(article);
+    setArticle(prevArticle => ({ ...prevArticle, content: html }));
     sendMessage(html);
+  };
+
+  const updateArticle = function (message:IMessage) {
+
+    setArticle(prevArticle => ({ ...prevArticle, content: message.body }));
+    textRef.current?.getInstance().setMarkdown(message.body);
+
   }
 
   const getArticleById = async () => {
     const data = await api.get(`/api/v1/articles/getArticle/`+id).then(res => {
-      console.log(res.data);
 
       if(res.data.isFail){
         alert(res.data.msg);
         router.back();
         return;
       }
-      setArticle(res.data.data.article)
-      
+
+      setArticle(res.data.data.article);
+      return article;
     })
+
+    return data;
   }
 
-  useEffect ( () => {
-    getArticleById();
-  } ,[])
+  const getMember = async () => await api.get("/api/v1/members/me")
+            .then(
+            res => {
+                console.log(res);
+                setMember({ ...member, id: res.data.data.id, username : res.data.data.username });
+            }
+            ).catch(function (error) {
+            console.log(error);
+            });
 
-  useEffect(() => {
-    console.log("돌아요~");
+  useEffect ( () => {
+    getMember();
+
+    getArticleById();
+    console.log(article);
     const client = new Client({
-      brokerURL: "ws://localhost:8010/chat", // 서버 WebSocket URL
+      brokerURL: "ws://localhost:8010/article", // 서버 WebSocket URL
       reconnectDelay: 5000,
-      onConnect: () => {
-        client.subscribe(`/topic/public/rooms/${id}`, (message: IMessage) => {
-          if(article){
-            console.log(message);
-            setArticle({...article, content:message.body});
-          }else{
-            console.log("이상해");
-          }
-          
-        });
-      },
     });
+
+    client.onConnect = function () {
+      client.subscribe(`/topic/public/article/${id}`, updateArticle);
+    };
     client.activate();
     setStompClient(client);
+    
     return () => {
       client.deactivate();
     };
-  }, []);
+  } ,[])
 
   const sendMessage = (html:string) => {
     if (stompClient) {
       stompClient.publish({
-        destination: `/app/chat/rooms/${id}/send`,
-        body: JSON.stringify({id:id, content:html}) ,
+        destination: `/app/article/${id}/send`,
+        body: JSON.stringify({id:id, content:html,memberId:member?.id}) ,
       });
-      console.log("보내기 끝났어요");
     }
   };
-
-
-
-
+  
   return (
     <div className="px-36 flex justify-center align-center my-auto">
       
@@ -95,14 +104,14 @@ export default function articleDetail() {
         </div>
         
         <div className="card-body">
-            {article.content && (
+            {article && (
                 <Editor
                   ref={textRef}
                   name="content"
                   previewStyle="vertical"
                   initialValue={article.content}
                   height="500px"
-                  onChange={handleChangeInput}
+                  onKeyup={handleChangeInput}
                 />
               )}
           
@@ -112,3 +121,4 @@ export default function articleDetail() {
     </div>
   );
 }
+

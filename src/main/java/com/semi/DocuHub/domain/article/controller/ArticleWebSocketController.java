@@ -1,5 +1,9 @@
 package com.semi.DocuHub.domain.article.controller;
 
+import com.semi.DocuHub.domain.article.entity.Article;
+import com.semi.DocuHub.domain.article.service.ArticleService;
+import com.semi.DocuHub.global.rq.Rq;
+import com.semi.DocuHub.global.rsData.RsData;
 import lombok.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,19 +17,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ArticleWebSocketController {
 
+    private final ArticleService articleService;
+    private final Rq rq;
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ii {
+    public static class SocketReq {
         Long id;
+        Long memberId;
         String content;
     }
 
-    @MessageMapping("/chat/rooms/{articleId}/send")
-    @SendTo("/topic/public/rooms/{articleId}")
-    public String sendMessage(@DestinationVariable Long articleId, @Payload ii i) {
+    @MessageMapping("/article/{articleId}/send")
+    @SendTo("/topic/public/article/{articleId}")
+    public String sendMessage(@DestinationVariable Long articleId, @Payload SocketReq sq) {
 
-        return i.getContent();
+        Article result = articleService.findByIdForWebSocket(sq.getMemberId(),sq.getId());
+
+        if(result == null) {
+            return "";
+        }
+
+        Article article = result.toBuilder().content(sq.getContent())
+                .build();
+
+        articleService.update(article);
+
+        return sq.getContent();
     }
 }
+

@@ -85,4 +85,20 @@ public class ArticleService {
 
         return articleRepository.findAllByArticleCategory(ac);
     }
+
+    public void update(Article article) {
+        articleRepository.save(article);
+    }
+
+    public Article findByIdForWebSocket(Long memberId, Long id) {
+
+        Article article = articleRepository.findById(id).orElse(null);
+
+        if(article == null){
+            return null;
+        }
+
+        return article;
+
+    }
 }

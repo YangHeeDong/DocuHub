@@ -44,17 +44,20 @@ const useRq = () => {
     }
 
     rq.initAuth = async() => {
-        await api.get("/api/v1/members/me")
+        const data = await api.get("/api/v1/members/me")
         .then(
         res => {
             if(res.data.isFail){
                 rq.setLogout();
             }
             setMember({ id: res.data.id, username : res.data.username });
+
+            return res.data.id;
         }
         ).catch(function (error) {
         console.log(error);
         });
+        return data;
     }
 
     rq.setLogined = async(username,password) => { 
