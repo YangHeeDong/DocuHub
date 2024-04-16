@@ -1,6 +1,7 @@
 package com.semi.DocuHub.domain.article.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
@@ -12,14 +13,11 @@ public class ArticleRequest {
         @NotBlank
         private String title;
 
-        @NotBlank
+        @NotNull
         private Boolean isTeam;
 
-        @NotBlank
+        @NotNull
         private Long teamId;
-
-        @NotBlank
-        private String sharing;
 
     }
 

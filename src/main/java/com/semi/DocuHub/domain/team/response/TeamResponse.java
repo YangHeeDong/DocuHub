@@ -1,5 +1,6 @@
 package com.semi.DocuHub.domain.team.response;
 
+import com.semi.DocuHub.domain.article.entity.Article;
 import com.semi.DocuHub.domain.team.dto.TeamDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class TeamResponse {
     public static class GetTeamRes {
 
         TeamDto team;
+        List<Article> articles;
 
     }
 

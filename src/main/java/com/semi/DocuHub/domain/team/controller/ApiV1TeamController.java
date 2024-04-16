@@ -1,5 +1,7 @@
 package com.semi.DocuHub.domain.team.controller;
 
+import com.semi.DocuHub.domain.article.entity.Article;
+import com.semi.DocuHub.domain.article.service.ArticleService;
 import com.semi.DocuHub.domain.team.dto.TeamDto;
 import com.semi.DocuHub.domain.team.entity.Team;
 import com.semi.DocuHub.domain.team.request.TeamRequest;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ApiV1TeamController {
 
     private final TeamService teamService;
+    private final ArticleService articleService;
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
@@ -44,7 +47,6 @@ public class ApiV1TeamController {
 
         RsData<Page<TeamDto>> result = teamService.getTeams(page);
 
-
         return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamsRes(result.getData()));
     }
 
@@ -56,7 +58,9 @@ public class ApiV1TeamController {
 
         if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg());
 
-        return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamRes(result.getData()));
+        List<Article> articles = articleService.findByTeamId(result.getData().getId());
+
+        return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamRes(result.getData(),articles));
     }
 
 

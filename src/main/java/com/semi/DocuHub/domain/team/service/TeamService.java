@@ -1,5 +1,7 @@
 package com.semi.DocuHub.domain.team.service;
 
+import com.semi.DocuHub.domain.article.entity.Article;
+import com.semi.DocuHub.domain.article.service.ArticleService;
 import com.semi.DocuHub.domain.image.entity.Image;
 import com.semi.DocuHub.domain.image.service.ImageService;
 import com.semi.DocuHub.domain.member.entity.Member;
@@ -52,6 +54,7 @@ public class TeamService {
         return RsData.of("S-1","팀을 생성하였습니다.",team);
     }
 
+    @Transactional
     private RsData validTeam(TeamRequest.TeamCreateReq req) {
 
         if(teamRepository.existsByTeamName(req.getTeamName())) return RsData.of("F-1","이미 존재하는 팀 입니다.");
@@ -59,7 +62,7 @@ public class TeamService {
         return RsData.of("S-1","생성가능");
     }
 
-
+    @Transactional
     public RsData<Page<TeamDto>> getTeams(int page) {
 
         Member teamMember = rq.getMember();
@@ -70,6 +73,7 @@ public class TeamService {
 
     }
 
+    @Transactional
     public RsData<TeamDto> getTeamById(Long id) {
 
         Team team = teamRepository.findById(id).orElseGet(null);

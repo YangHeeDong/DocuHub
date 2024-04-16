@@ -107,11 +107,9 @@ public class ApiV1MemberController {
 
     @PostMapping("/findPassword")
     public RsData findPassword(@Valid @RequestBody MemberRequest.FindPasswordReq req, BindingResult br){
-
         if(br.hasErrors()){
             return RsData.of("F-1","회원정보를 알맞게 입력해 주세요");
         }
-
         return memberService.findPassword(req);
     }
 
