@@ -181,7 +181,7 @@ export default function signup() {
                 <div className="flex mt-2">
             
                   <div className="w-3/12 flex justify-center items-center">
-                    <img className="h-16 w-16 object-cover rounded-full border" id="preview" src="" alt="Current profile photo" />
+                    <img className="h-16 w-16 object-cover rounded-full border" id="preview" src={"/member/default.jpg"} alt="Current profile photo" />
                   </div>
                   
                   <div className="w-9/12 flex items-center ">

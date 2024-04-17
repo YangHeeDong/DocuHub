@@ -23,4 +23,5 @@ public class Article extends BaseEntity {
     private String content;
     private Long View;
 
+    private String sharing;
 }

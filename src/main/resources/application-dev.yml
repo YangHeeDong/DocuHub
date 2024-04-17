@@ -29,4 +29,5 @@ spring:
       initialize-schema: always
 
 custom:
-  fileDirPath: C:\DocuHub\file_upload
+  fileDirPath: C:\work\DocuHub\frontapp\public
+

@@ -50,7 +50,7 @@ public class TeamMemberService {
         Page<TeamMember> teamMemberList = teamMemberRepository.findAllByTeamMember(teamMember,pageable);
 
         return teamMemberList.map(tm -> {
-            return new TeamDto(tm.getTeam(),imageService.getImage("team",tm.getTeam().getId()));
+            return new TeamDto(tm.getTeam(),imageService.getImage("team",tm.getTeam().getId()),imageService.getImage("member",tm.getTeam().getTeamAdmin().getId()));
         });
     }
 }

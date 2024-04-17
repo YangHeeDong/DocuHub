@@ -83,6 +83,7 @@ const useRq = () => {
     rq.setLogout = async() => {
         setMember({ id: 0, username : "" });
         await api.post("http://localhost:8010/api/v1/members/logout");
+        rq.router.push('/');
     }
 
     return rq;

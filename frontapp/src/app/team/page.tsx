@@ -46,6 +46,7 @@ export default function team() {
       if(i == page){
         result.push(
           <button
+              key={i}
               disabled
               aria-current="page"
               className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -56,6 +57,7 @@ export default function team() {
       }else{
         result.push(
           <a
+            key={i}
             href={"/team?page="+(i)}
             className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
           >
@@ -76,13 +78,11 @@ export default function team() {
     <div className="px-36 flex justify-center align-center my-auto">
       
       <div className="card size-full bg-base-100 shadow-xl mb-5 mt-3">
-        <div className="flex border-b-2 py-3">
-          <p className="">
-            card title
-          </p>
-          <a href="/team/create" className="">
-            create team
-          </a>
+        <div className=" text-center  text-2xl font-bold border-b-2 py-3">
+            My Teams
+            <div className="float-end inline-block me-3">
+              <a href="/team/create" className="btn btn-sm float-end align-center me-2 text-base font-normal">+</a>
+            </div>
         </div>
         
       <div className="card-body">
@@ -93,7 +93,8 @@ export default function team() {
             <div className="card-body">
               <h2 className="card-title truncate">{team?.teamName}</h2>
               <p className="truncate">{team?.teamDescription}</p>
-              <div className="truncate text-end">
+              <div className="truncate flex justify-end">
+                <img className="h-7 w-7 object-cover rounded-full border me-2" id="preview" src={team?.teamAdmin.memberImgPath} alt="MemberProfile" />
                 {team?.teamAdmin.username}
               </div>
             </div>

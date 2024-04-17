@@ -28,22 +28,12 @@ export default function RootLayout({
       <div className="navbar bg-base-100 absolute">
         <div className="navbar-start">
           
-          <a className="btn btn-ghost text-2xl font-bold">DocuHub</a>
+          <a href="/" className="btn btn-ghost text-2xl font-bold">DocuHub</a>
         </div>
         <div className="navbar-center lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li><a href="/team">Team</a></li>
             <li><a href="/article">Article</a></li>
-            <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li><a>Submenu 1</a></li>
-                  <li><a>Submenu 2</a></li>
-                </ul>
-                
-              </details>
-            </li>
           </ul>
         </div>
         <div className="navbar-end me-2">

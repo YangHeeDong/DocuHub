@@ -4,6 +4,7 @@ import com.semi.DocuHub.domain.article.entity.Article;
 import com.semi.DocuHub.domain.article.service.ArticleService;
 import com.semi.DocuHub.domain.image.entity.Image;
 import com.semi.DocuHub.domain.image.service.ImageService;
+import com.semi.DocuHub.domain.member.dto.MemberDto;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.team.dto.TeamDto;
 import com.semi.DocuHub.domain.team.entity.Team;
@@ -90,7 +91,20 @@ public class TeamService {
 
         Image teamImg = imageService.getImage("team",team.getId());
 
-        return RsData.of("S-1","팀 조회 성공",new TeamDto(team,teamImg));
+        List<MemberDto> teamMembers = team.getTeamMemberList().stream().map( teamMember -> {
+            return new MemberDto(teamMember.getTeamMember(), imageService.getImage("member",teamMember.getTeamMember().getId()));
+        } ).toList();
+
+        return RsData.of("S-1",
+                "팀 조회 성공",
+                new TeamDto(
+                        team,
+                        teamImg,
+                        imageService.getImage("member",team.getTeamAdmin().getId()),
+                        teamMembers
+                )
+
+        );
 
     }
 

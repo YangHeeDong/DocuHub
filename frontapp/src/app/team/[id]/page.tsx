@@ -91,16 +91,16 @@ export default function createTeam() {
           <div className="card-body">
             
             <div className=" grid grid-cols-3 gap-2">
-              <div className="bg-slate-200">
-                <figure><img src={team && team.teamImg.path} className="object-contain bg-slate-200" alt={ team && team.teamImg.originalFileName} /></figure>
-                {/* <figure><img src="https://cdn.spotvnews.co.kr/news/photo/202212/572523_797960_5232.jpg" className="w-50 h-50 object-contain bg-slate-200" alt={ team && team.teamImg.originalFileName} /></figure> */}
+              <div className="bg-slate-200 border">
+                <figure><img src={team && team.teamImg.path} className="object-contain bg-slate-200 h-60" alt={ team && team.teamImg.originalFileName} /></figure>
                 
               </div>
-              <div className="col-span-2">
+              <div className="ms-5 col-span-2 flex flex-col justify-between">
                 <div>
                   {team && team.teamDescription}
-                </div>
-                <div className="text-end">
+                </div>  
+                <div className="flex justify-end">
+                  <img className="h-7 w-7 object-cover rounded-full border me-2" id="preview" src={team?.teamAdmin.memberImgPath} alt="MemberProfile" />
                   {team && team.teamAdmin.username}
                 </div>
               </div>
@@ -115,8 +115,14 @@ export default function createTeam() {
           </div>
           <div className="card-body overflow-auto">
             {team && team.teamMemberList.map(member => (
-              <div key={member.id}>
-                {member.username}
+              <div className="flex items-center justify-between" key={member.id}>
+                <div className="flex items-center">
+                  <img className="h-10 w-10 object-cover rounded-full border me-2" id="preview" src={member?.memberImgPath} alt="MemberProfile" />
+                  {member.username}
+                </div>
+                <div>
+                  {team.teamAdmin.id === member.id ? "Admin": "Member"}
+                </div>
               </div>
             )
             )}

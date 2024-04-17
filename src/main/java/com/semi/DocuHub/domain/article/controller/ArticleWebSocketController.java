@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleWebSocketController {
 
     private final ArticleService articleService;
-    private final Rq rq;
 
     @Getter
     @Setter

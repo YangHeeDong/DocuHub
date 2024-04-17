@@ -38,17 +38,16 @@ public class ImageService {
         String originalFileName = "";
 
         if (profileImg == null) {
-            filePath = "/img/kakako-00.jpg";
+            filePath = "/member/default.jpg";
             originalFileName = "defaultImage";
         } else if (!profileImg.isEmpty()) {
 
             createFolder("user");
 
             originalFileName = profileImg.getOriginalFilename();
-            filePath = "member/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            filePath = "/member/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
             File profileImgFile = new File(fileDirPath + "/" + filePath);
             profileImg.transferTo(profileImgFile);
-            filePath = "/file/" + filePath;
         }
 
         Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(member.getId()).relationEntity("member").build();
@@ -78,17 +77,16 @@ public class ImageService {
         String originalFileName = "";
 
         if (teamImg == null) {
-            filePath = "/img/kakako-00.jpg";
+            filePath = "/team/default.jpg";
             originalFileName = "defaultImage";
         } else if (!teamImg.isEmpty()) {
 
             createFolder("team");
 
             originalFileName = teamImg.getOriginalFilename();
-            filePath = "team/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            filePath = "/team/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
             File profileImgFile = new File(fileDirPath + "/" + filePath);
             teamImg.transferTo(profileImgFile);
-            filePath = "/file/" + filePath;
         }
 
         Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(team.getId()).relationEntity("team").build();

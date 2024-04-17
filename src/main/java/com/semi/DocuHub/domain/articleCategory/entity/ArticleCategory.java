@@ -16,6 +16,5 @@ public class ArticleCategory extends BaseEntity {
 
     private Boolean isTeam;
     private Long relationId;
-    private String sharing;
 
 }

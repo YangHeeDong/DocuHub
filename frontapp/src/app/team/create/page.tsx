@@ -75,7 +75,7 @@ export default function createTeam() {
       }
       
       console.log(res);
-      // router.push("/member/login");
+      router.push("/team");
 
       }
     ).catch(function (error) {
@@ -132,7 +132,7 @@ export default function createTeam() {
                 <div className="flex mt-2">
             
                   <div className="w-3/12 flex justify-center items-center">
-                    <img className="h-16 w-16 object-cover rounded-full border" id="preview" src="" alt="Current profile photo" />
+                    <img className="h-16 w-16 object-cover rounded-full border" id="preview" src={"/team/default.jpg"} alt="Current profile photo" />
                   </div>
                   
                   <div className="w-9/12 flex items-center ">
