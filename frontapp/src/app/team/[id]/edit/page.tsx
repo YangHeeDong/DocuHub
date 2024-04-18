@@ -1,12 +1,17 @@
 "use client";
 
 import api from "@/app/utils/api";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function createTeam() {
-  const [member, setMember] = useState({ id: 0, username: "" });
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+export default function editTeam() {
+  const [team, setTeam] = useState(null);
+  const router = useRouter();
+
+  const id = useParams().id;
+
+  const [member, setMember] = useState(null);
   const getMember = async () =>
     await api
       .get("/api/v1/members/me")
@@ -25,12 +30,18 @@ export default function createTeam() {
         router.push("/");
       });
 
-  const [team, setTeam] = useState({
-    teamName: "",
-    teamDescription: "",
-    teamImg: "",
-  });
-  const router = useRouter();
+  const getTeamById = async () => {
+    const data = await api.get(`/api/v1/team/getTeam/` + id).then((res) => {
+      console.log(res.data);
+
+      if (res.data.isFail) {
+        alert(res.data.msg);
+        router.push("/");
+        return;
+      }
+      setTeam(res.data.data.team);
+    });
+  };
 
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -56,12 +67,12 @@ export default function createTeam() {
   }
 
   function inputValid() {
-    if (team.teamName == "") {
+    if (team?.teamName == "") {
       alert("팀 이름을 입력해 주세요");
       inputFocus("teamName");
       return false;
     }
-    if (team.teamDescription == "") {
+    if (team?.teamDescription == "") {
       alert("팀 설명을 입력해 주세요");
       inputFocus("teamDescription");
       return false;
@@ -78,12 +89,13 @@ export default function createTeam() {
     }
 
     const formData = new FormData();
+    formData.append("id", team.id);
     formData.append("teamName", team.teamName);
     formData.append("teamDescription", team.teamDescription);
     formData.append("teamImg", team.teamImg);
 
     await api
-      .post("/api/v1/team/create", formData)
+      .patch("/api/v1/team/edit", formData)
       .then((res) => {
         alert(res.data.msg);
 
@@ -91,18 +103,28 @@ export default function createTeam() {
           inputFocus(res.data.data);
           return;
         }
-
         console.log(res);
-        router.push("/team");
+        router.push("/team/" + team.id);
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
+  const isAdmin = () => {
+    if (member && team && member.id !== team.teamAdmin.id) {
+      router.back();
+    }
+  };
+
   useEffect(() => {
     getMember();
+    getTeamById();
   }, []);
+
+  useEffect(() => {
+    isAdmin();
+  }, [team]);
 
   return (
     <div className="px-24 flex h-100 justify-center align-center my-auto">
@@ -111,7 +133,7 @@ export default function createTeam() {
           <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
             <div className="text-3xl font-bold mb-5">DocuHub</div>
             <h2 className=" text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Create a team
+              Edit a team
             </h2>
           </div>
 
@@ -130,6 +152,7 @@ export default function createTeam() {
                     name="teamName"
                     onChange={handlerChange}
                     required
+                    defaultValue={team && team.teamName}
                     className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -149,6 +172,7 @@ export default function createTeam() {
                     name="teamDescription"
                     onChange={handlerChange}
                     required
+                    defaultValue={team && team.teamDescription}
                     className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -168,7 +192,7 @@ export default function createTeam() {
                     <img
                       className="h-16 w-16 object-cover rounded-full border"
                       id="preview"
-                      src={"/team/default.jpg"}
+                      src={team && team.teamImg.path}
                       alt="Current profile photo"
                     />
                   </div>
@@ -196,7 +220,7 @@ export default function createTeam() {
                   onClick={doSubmmit}
                   className="mt-5 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Create team
+                  Edit team
                 </button>
               </div>
             </div>

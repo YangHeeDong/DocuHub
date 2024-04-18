@@ -2,6 +2,7 @@ package com.semi.DocuHub.domain.team.controller;
 
 import com.semi.DocuHub.domain.article.entity.Article;
 import com.semi.DocuHub.domain.article.service.ArticleService;
+import com.semi.DocuHub.domain.articleCategory.service.ArticleCategoryService;
 import com.semi.DocuHub.domain.team.dto.TeamDto;
 import com.semi.DocuHub.domain.team.entity.Team;
 import com.semi.DocuHub.domain.team.request.TeamRequest;
@@ -25,6 +26,7 @@ public class ApiV1TeamController {
 
     private final TeamService teamService;
     private final ArticleService articleService;
+    private final ArticleCategoryService articleCategoryService;
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
@@ -63,5 +65,30 @@ public class ApiV1TeamController {
         return RsData.of(result.getResultCode(), result.getMsg(), new TeamResponse.GetTeamRes(result.getData(),articles));
     }
 
+    @PatchMapping("/edit")
+    public RsData<TeamDto> edit (@Valid TeamRequest.TeamEditReq req, BindingResult br, @RequestParam(name = "teamImg", required = false) MultipartFile teamImg) {
+
+        if(br.hasErrors()){
+            return RsData.of("F-1","팀 생성 정보를 알맞게 입력해 주세요");
+        }
+
+        RsData<Team> result = teamService.edit(req, teamImg);
+
+        if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg());
+
+        return RsData.of(result.getResultCode(), result.getMsg(), new TeamDto(result.getData()) );
+    }
+
+    @DeleteMapping("/{id}")
+    public RsData delete (@PathVariable(name = "id") Long id) {
+
+        RsData result = teamService.delete(id);
+
+        if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg());
+
+        articleCategoryService.deleteArticleByTeamId(id);
+
+        return RsData.of(result.getResultCode(), result.getMsg());
+    }
 
 }

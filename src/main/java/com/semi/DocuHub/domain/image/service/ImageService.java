@@ -7,6 +7,7 @@ import com.semi.DocuHub.domain.team.entity.Team;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,6 +93,31 @@ public class ImageService {
         Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(team.getId()).relationEntity("team").build();
 
         this.imageRepository.save(userProfile);
+
+    }
+
+    @SneakyThrows
+    public void updateTeamImg(Team editTeam, MultipartFile teamImg) {
+
+        createFolder("team");
+
+        String originalFileName = teamImg.getOriginalFilename();
+        String filePath = "/team/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath + "/" + filePath);
+        teamImg.transferTo(profileImgFile);
+
+        Image update = imageRepository.findByRelationEntityAndRelationId("team",editTeam.getId()).get();
+
+        update = update.toBuilder().originalFileName(originalFileName).path(filePath).build();
+
+        imageRepository.save(update);
+
+    }
+
+    public void deleteImg(String team, Long id) {
+
+        Image image = imageRepository.findByRelationEntityAndRelationId(team,id).get();
+        imageRepository.delete(image);
 
     }
 }

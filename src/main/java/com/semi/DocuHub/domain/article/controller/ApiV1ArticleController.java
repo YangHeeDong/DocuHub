@@ -47,4 +47,16 @@ public class ApiV1ArticleController {
         return RsData.of(result.getResultCode(),result.getMsg(), new ArticleResponse.createRes(result.getData()));
     }
 
+    @DeleteMapping ("/{id}")
+    public RsData delete (@PathVariable(name = "id") Long id) {
+
+        RsData result = articleService.delete(id);
+
+        if(result.getIsFail()){
+            return RsData.of(result.getResultCode(), result.getMsg());
+        }
+
+        return RsData.of(result.getResultCode(),result.getMsg());
+    }
+
 }

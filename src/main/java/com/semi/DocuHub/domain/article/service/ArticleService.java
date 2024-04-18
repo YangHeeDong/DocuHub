@@ -101,4 +101,23 @@ public class ArticleService {
         return article;
 
     }
+
+    public RsData delete(Long id) {
+        
+        Article article = articleRepository.findById(id).orElse(null);
+
+        if(article == null){
+            return RsData.of("F-1", "존재하지 않는 게시글 입니다.");
+        }
+
+        RsData<TeamDto> team = teamService.getTeamById(article.getArticleCategory().getRelationId());
+
+        if( team.getIsFail()) {
+            return RsData.of("F-2", "권한이 없습니다.");
+        }
+        
+        articleRepository.delete(article);
+
+        return RsData.of("S-1", "삭제하였습니다.");
+    }
 }

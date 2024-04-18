@@ -1,5 +1,6 @@
 package com.semi.DocuHub.domain.article.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.semi.DocuHub.domain.articleCategory.entity.ArticleCategory;
 import com.semi.DocuHub.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 public class Article extends BaseEntity {
 
     @ManyToOne
+    @JsonIgnore
     private ArticleCategory articleCategory;
 
     private String title;

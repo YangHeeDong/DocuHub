@@ -20,4 +20,14 @@ public class ArticleCategoryService {
     public ArticleCategory findByRelationIdAndIsTeam(Long id, boolean isTeam) {
         return articleCategoryRepository.findByRelationIdAndIsTeam(id,isTeam).orElse(null);
     }
+
+    public void deleteArticleByTeamId(Long id) {
+
+        ArticleCategory ac = this.findByRelationIdAndIsTeam(id, true);
+
+        if(ac != null){
+            articleCategoryRepository.delete(ac);
+        }
+
+    }
 }

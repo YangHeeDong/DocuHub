@@ -24,21 +24,13 @@
 //            return args -> {
 //
 //                // 회원 3명 추가
-//                RsData<Member> user1 = memberService.save(MemberRequest.SignupReq.builder()
-//                        .username("user1")
-//                        .password("1234")
-//                        .passwordConfirm("1234")
-//                        .email("user1@gmail.com").build(),null);
-//                RsData<Member> user2 = memberService.save(MemberRequest.SignupReq.builder()
-//                        .username("user2")
-//                        .password("1234")
-//                        .passwordConfirm("1234")
-//                        .email("user2@gmail.com").build(),null);
-//                RsData<Member> admin = memberService.save(MemberRequest.SignupReq.builder()
-//                        .username("admin")
-//                        .password("1234")
-//                        .passwordConfirm("1234")
-//                        .email("admin@gmail.com").build(),null);
+//                for(int i = 1 ; i <=100 ; i++){
+//                    RsData<Member> user1 = memberService.save(MemberRequest.SignupReq.builder()
+//                            .username("user"+i)
+//                            .password("1234")
+//                            .passwordConfirm("1234")
+//                            .email("user"+i+"@gmail.com").build(),null);
+//                }
 //
 //                for(int i = 0; i<100; i++){
 //
@@ -60,6 +52,18 @@
 //
 //                }
 //
+//                for(Long i = 2L; i <=100 ; i++){
+//
+//                    Member member = memberService.findById(i);
+//                    Team team= teamRepository.findById(100L).get();
+//
+//                    TeamMember teamMember = TeamMember.builder()
+//                            .teamMember(member)
+//                            .team(team)
+//                            .authority("admin")
+//                            .build();
+//                    teamMemberRepository.save(teamMember);
+//                }
 //
 //                // 작성자 회원 추가
 //    //            articleService.save(user1,ApiV1ArticleController.ArticleSaveReq.builder().title("제목1").content("내용1").build());

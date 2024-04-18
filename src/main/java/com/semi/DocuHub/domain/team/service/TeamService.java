@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -108,4 +109,61 @@ public class TeamService {
 
     }
 
+    public RsData<Team> edit(TeamRequest.TeamEditReq req, MultipartFile teamImg) {
+
+        Team team = teamRepository.findByTeamName(req.getTeamName());
+
+        // 새로 업데이트할 이름이 존재한다면
+        if(team != null){
+            // 만약 그 이름을 가진 팀이 원래 내 팀이 아니라면
+            if(team.getId() != req.getId()){
+                return RsData.of("F-2","이미 존재하는 팀 이름 입니다.");
+            }
+        }else{
+            team = teamRepository.findById(req.getId()).get();
+        }
+
+        team = team.toBuilder()
+                .teamName(req.getTeamName())
+                .teamDescription(req.getTeamDescription())
+                .build() ;
+
+        if(team.getTeamAdmin().getId() != rq.getMember().getId()){
+            return RsData.of("F-1","권한이 없습니다.");
+        }
+
+        teamRepository.save(team);
+
+        if(teamImg !=  null){
+            imageService.updateTeamImg(team, teamImg);
+        }
+
+        return RsData.of("S-1","수정 성공", team);
+    }
+
+    public RsData delete(Long id) {
+
+        Team team = teamRepository.findById(id).orElseGet(null);
+
+        if(team == null){
+            return RsData.of("F-1","존재하지 않는 팀입니다.");
+        }
+
+        TeamMember tm = team.getTeamMemberList().stream().filter(teamMember -> teamMember.getTeamMember() == rq.getMember()).findFirst().orElse(null);
+
+        if(tm == null){
+            return RsData.of("F-2","잘못된 접근 입니다.");
+        }
+
+        if(team.getTeamMemberList().size() > 1){
+            return RsData.of("F-3","팀원 추방 후 삭제해주세요");
+        }
+
+        imageService.deleteImg("team",team.getId());
+
+        teamRepository.delete(team);
+
+        return RsData.of("S-1","팀을 삭제했습니다.");
+
+    }
 }
