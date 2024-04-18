@@ -166,4 +166,16 @@ public class TeamService {
         return RsData.of("S-1","팀을 삭제했습니다.");
 
     }
+
+    public Team getTeamByIdForTeamMember(Long teamId) {
+        return teamRepository.findById(teamId).get();
+    }
+
+    public void updateAdmin(Team team, Member member) {
+
+        team = team.toBuilder().teamAdmin(member).build();
+
+        teamRepository.save(team);
+
+    }
 }

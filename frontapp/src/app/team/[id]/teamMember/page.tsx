@@ -1,12 +1,14 @@
 "use client";
 
 import api from "@/app/utils/api";
+import MemberDropDown from "@/app/utils/memberDropDown";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function createTeam() {
   const [team, setTeam] = useState(null);
+  const [searchMembers, setSearchMembers] = useState([]);
   const router = useRouter();
 
   const id = useParams().id;
@@ -44,6 +46,62 @@ export default function createTeam() {
     });
   };
 
+  const handlerSearch = async (e) => {
+    console.log("레전드");
+    if (e.target.value == "") {
+      setSearchMembers([]);
+      return;
+    }
+    console.log("돌아요~");
+
+    await api
+      .get("/api/v1/members/search?searchParam=" + e.target.value)
+      .then((res) => {
+        if (res.data.isSuccess) {
+          setSearchMembers(res.data.data.members);
+        }
+      });
+  };
+
+  const handlerAdmin = async (memberId: string) => {
+    if (!confirm("정말 관리자를 변경하시겠습니까?")) {
+      return;
+    }
+
+    await api
+      .patch("/api/v1/teamMember/" + team?.id + "/" + memberId)
+      .then((res) => {
+        alert(res.data.msg);
+        if (res.data.isSuccess) {
+          router.push("/team/" + team.id);
+        }
+      });
+  };
+
+  const handlerDelete = async (memberId: string) => {
+    if (!confirm("정말 해당회원을 방출 하시겠습니까?")) {
+      return;
+    }
+    await api
+      .delete("/api/v1/teamMember/" + team?.id + "/" + memberId)
+      .then((res) => {
+        alert(res.data.msg);
+        if (res.data.isSuccess) {
+          getTeamById();
+        }
+      });
+  };
+
+  const isAdmin = () => {
+    if (member && team && member.id !== team.teamAdmin.id) {
+      router.back();
+    }
+  };
+
+  useEffect(() => {
+    isAdmin();
+  }, [team]);
+
   useEffect(() => {
     getMember();
     getTeamById();
@@ -64,25 +122,51 @@ export default function createTeam() {
           </div>
           <div className="card-body overflow-auto h-0">
             {team &&
-              team.teamMemberList.map((member) => (
-                <div
-                  className="flex items-center justify-between"
-                  key={member.id}
-                >
-                  <div className="flex items-center">
-                    <img
-                      className="h-10 w-10 object-cover rounded-full border me-2"
-                      id="preview"
-                      src={member?.memberImgPath}
-                      alt="MemberProfile"
-                    />
-                    {member.username}
+              team.teamMemberList.map((member) =>
+                team.teamAdmin.id === member.id ? (
+                  <div
+                    className="flex items-center justify-between"
+                    key={member.id}
+                  >
+                    <div className="flex items-center">
+                      <img
+                        className="h-10 w-10 object-cover rounded-full border me-2"
+                        id="preview"
+                        src={member?.memberImgPath}
+                        alt="MemberProfile"
+                      />
+                      {member.username}
+                    </div>
+                    <div>
+                      {team.teamAdmin.id === member.id ? "Admin" : "Member"}
+                    </div>
                   </div>
-                  <div>
-                    {team.teamAdmin.id === member.id ? "Admin" : "Member"}
+                ) : (
+                  <div
+                    className="flex items-center justify-between"
+                    key={member.id}
+                  >
+                    <div className="flex items-center">
+                      <img
+                        className="h-10 w-10 object-cover rounded-full border me-2"
+                        id="preview"
+                        src={member?.memberImgPath}
+                        alt="MemberProfile"
+                      />
+                      {member.username}
+                    </div>
+                    <div className="flex items-center">
+                      {team.teamAdmin.id === member.id ? "Admin" : "Member"}
+                      <MemberDropDown
+                        memberId={member.id}
+                        memberName={member.username}
+                        handlerAdmin={handlerAdmin}
+                        handlerDelete={handlerDelete}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
           </div>
         </div>
 
@@ -91,7 +175,12 @@ export default function createTeam() {
             <div className=" flex items-center justify-between px-7 text-center border-b-2 py-3 text-2xl font-bold">
               Search Member
               <label className="input input-bordered flex items-center gap-2">
-                <input type="text" className="grow" placeholder="Search" />
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="Search"
+                  onChange={handlerSearch}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
@@ -106,7 +195,19 @@ export default function createTeam() {
                 </svg>
               </label>
             </div>
-            <div className="card-body overflow-auto h-60"></div>
+            <div className="card-body overflow-auto h-60 gap-3">
+              {searchMembers.map((member) => (
+                <a href="#" className="flex items-center" key={member.id}>
+                  <img
+                    className="h-10 w-10 object-cover rounded-full border me-2"
+                    id="preview"
+                    src={member?.memberImgPath}
+                    alt="MemberProfile"
+                  />
+                  {member.username}
+                </a>
+              ))}
+            </div>
           </div>
 
           <div className="card bg-base-100 h-100 shadow-xl">

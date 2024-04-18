@@ -113,5 +113,12 @@ public class ApiV1MemberController {
         return memberService.findPassword(req);
     }
 
+    @GetMapping("/search")
+    public RsData<MemberResponse.SearchMemberRes> searchMember(@RequestParam String searchParam) {
+
+        List<MemberDto> members = memberService.findByParam(searchParam);
+
+        return RsData.of("S-1","조회 성공",new MemberResponse.SearchMemberRes(members));
+    }
 
 }

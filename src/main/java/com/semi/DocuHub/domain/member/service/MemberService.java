@@ -1,6 +1,7 @@
 package com.semi.DocuHub.domain.member.service;
 
 import com.semi.DocuHub.domain.image.service.ImageService;
+import com.semi.DocuHub.domain.member.dto.MemberDto;
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.member.repository.MemberRepository;
 import com.semi.DocuHub.domain.member.request.MemberRequest;
@@ -158,4 +159,10 @@ public class MemberService {
         return memberRepository.findById(id).orElseGet(null);
     }
 
+    public List<MemberDto> findByParam(String searchParam) {
+
+        List<Member> members = memberRepository.findByUsernameContaining(searchParam);
+
+        return members.stream().map( member -> { return new MemberDto(member,imageService.getImage("member",member.getId()));}).toList();
+    }
 }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 public class MemberResponse {
 
@@ -32,5 +34,13 @@ public class MemberResponse {
         }
     }
 
+    @NoArgsConstructor
+    @Getter
+    public static class SearchMemberRes {
 
+        private List<MemberDto> members;
+        public SearchMemberRes(List<MemberDto> members){
+            this.members = members;
+        }
+    }
 }

@@ -53,4 +53,12 @@ public class MemberRequest {
 
     }
 
+    @Getter
+    public static class SearchMember {
+
+        @NotBlank
+        public String param;
+
+    }
+
 }

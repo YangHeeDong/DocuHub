@@ -41,7 +41,6 @@ export default function articleDetail() {
         router.back();
         return;
       }
-
       setArticle(res.data.data.article);
     });
   };

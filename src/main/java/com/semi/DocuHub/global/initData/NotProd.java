@@ -24,7 +24,7 @@
 //            return args -> {
 //
 //                // 회원 3명 추가
-//                for(int i = 1 ; i <=100 ; i++){
+//                for(int i = 1 ; i <=200 ; i++){
 //                    RsData<Member> user1 = memberService.save(MemberRequest.SignupReq.builder()
 //                            .username("user"+i)
 //                            .password("1234")

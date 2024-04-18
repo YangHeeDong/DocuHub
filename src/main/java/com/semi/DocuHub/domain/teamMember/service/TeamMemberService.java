@@ -8,6 +8,7 @@ import com.semi.DocuHub.domain.team.entity.Team;
 import com.semi.DocuHub.domain.teamMember.entity.TeamMember;
 import com.semi.DocuHub.domain.teamMember.repository.TeamMemberRepository;
 import com.semi.DocuHub.global.rq.Rq;
+import com.semi.DocuHub.global.rsData.RsData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +54,52 @@ public class TeamMemberService {
         return teamMemberList.map(tm -> {
             return new TeamDto(tm.getTeam(),imageService.getImage("team",tm.getTeam().getId()),imageService.getImage("member",tm.getTeam().getTeamAdmin().getId()));
         });
+    }
+
+    public RsData delete(Team team, Member member) {
+
+
+        Optional<TeamMember> teamMember = teamMemberRepository.findByTeamAndTeamMember(team,member);
+
+        if(teamMember.isEmpty()) {
+            return RsData.of("F-1","존재 하지 않는 팀원");
+        }
+
+        teamMemberRepository.delete(teamMember.get());
+
+        return RsData.of("S-1","삭제 완료");
+
+    }
+
+    public RsData delete(Team team) {
+
+        
+        Optional<TeamMember> teamMember = teamMemberRepository.findByTeamAndTeamMember(team,rq.getMember());
+
+        if(team.getTeamAdmin().getId() == rq.getMember().getId()){
+            return RsData.of("F-2","팀장은 탈퇴할 수 없습니다.");
+        }
+
+        if(teamMember.isEmpty()) {
+            return RsData.of("F-1","존재 하지 않는 팀원");
+        }
+
+        teamMemberRepository.delete(teamMember.get());
+
+        return RsData.of("S-1","탈퇴 완료");
+
+    }
+
+    public RsData update(Team team, Member member) {
+
+        Optional<TeamMember> teamMember = teamMemberRepository.findByTeamAndTeamMember(team,member);
+
+        if(teamMember.isEmpty()) {
+            return RsData.of("F-1","존재 하지 않는 팀원");
+        }
+
+        teamMemberRepository.save(teamMember.get().toBuilder().authority("member").build());
+
+        return RsData.of("S-1","변경 완료");
     }
 }

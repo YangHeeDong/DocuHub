@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import useRq from "@/app/utils/rq";
 import { useEffect, useState } from "react";
 
@@ -16,9 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const rq = useRq();
+  const [member,setMember]  = useState({});
 
   useEffect(() => {
-    rq.initAuth();
+    console.log(rq.initAuth());
+    console.log(member);
   }, []);
 
   return (

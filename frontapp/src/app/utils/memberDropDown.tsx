@@ -7,15 +7,22 @@ function classNames(...classes) {
 }
 
 type GreetingsProps = {
-  teamId: number;
-  onClick: Function;
+  memberId: number;
+  memberName: string;
+  handlerAdmin: Function;
+  handlerDelete: Function;
 };
 
-const TeamDropDown = ({ teamId, onClick }: GreetingsProps) => {
+const MemberDropDown = ({
+  memberId,
+  memberName,
+  handlerAdmin,
+  handlerDelete,
+}: GreetingsProps) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className=" inline-flex justify-center gap-x-1.5 rounded-md bg-white px-1 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        <Menu.Button className=" inline-flex justify-center gap-x-1.5 rounded-md bg-white px-1 py-1 text-sm font-semibold text-gray-900 shadow-sm ">
           <ChevronDownIcon
             className="h-5 w-5 text-gray-400"
             aria-hidden="true"
@@ -36,27 +43,27 @@ const TeamDropDown = ({ teamId, onClick }: GreetingsProps) => {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href={"/team/" + teamId + "/edit"}
+                <button
+                  onClick={() => handlerAdmin(memberId)}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
                 >
-                  Edit Team
-                </a>
+                  팀장 임명
+                </button>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => onClick()}
+                  onClick={() => handlerDelete(memberId)}
                   className={classNames(
                     active ? "bg-gray-100 text-red-800" : "text-red-800",
                     "block px-4 py-2 text-sm"
                   )}
                 >
-                  Delete Team
+                  팀원 추방
                 </button>
               )}
             </Menu.Item>
@@ -67,4 +74,4 @@ const TeamDropDown = ({ teamId, onClick }: GreetingsProps) => {
   );
 };
 
-export default TeamDropDown;
+export default MemberDropDown;

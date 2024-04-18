@@ -8,7 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Cog6ToothIcon, DocumentPlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
-import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import {
+  DocumentTextIcon,
+  UserMinusIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import TeamDropDown from "@/app/utils/teamDropDown";
 
 export default function createTeam() {
@@ -114,6 +118,21 @@ export default function createTeam() {
       });
   };
 
+  const handlerLeave = async () => {
+    if (!confirm("정말 탈퇴하시겠습니까?")) {
+      return;
+    }
+
+    await api.delete(`/api/v1/teamMember/` + id).then((res) => {
+      alert(res.data.msg);
+
+      if (res.data.isSuccess) {
+        router.push("/team");
+        return;
+      }
+    });
+  };
+
   useEffect(() => {
     getMember();
     getTeamById();
@@ -127,14 +146,15 @@ export default function createTeam() {
             {team && team.teamName}
             {(member && member.id) === (team && team.teamAdmin.id) ? (
               <div className="float-end inline-block me-3">
-                {" "}
-                <TeamDropDown
-                  teamId={Number(id)}
-                  onClick={deleteFunction}
-                />{" "}
+                <TeamDropDown teamId={Number(id)} onClick={deleteFunction} />
               </div>
             ) : (
-              ""
+              <button
+                onClick={handlerLeave}
+                className="float-end inline-block me-3"
+              >
+                <UserMinusIcon className="stroke-red-500 w-7 me-3" />
+              </button>
             )}
           </div>
           <div className="card-body">
