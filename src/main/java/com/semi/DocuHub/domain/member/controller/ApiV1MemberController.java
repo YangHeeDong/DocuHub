@@ -28,6 +28,7 @@ import java.util.List;
 public class ApiV1MemberController {
 
     private final MemberService memberService;
+    private final ImageService imageService;
 
     private final Rq rq;
 
@@ -38,7 +39,7 @@ public class ApiV1MemberController {
             return RsData.of("F-1","로그인안됨");
         }
 
-        return RsData.of("S-1","로그인됨",new MemberDto(rq.getMember()));
+        return RsData.of("S-1","로그인됨",new MemberDto(rq.getMember(),imageService.getImage("member",rq.getMember().getId())));
     }
 
     @PostMapping("/signup")

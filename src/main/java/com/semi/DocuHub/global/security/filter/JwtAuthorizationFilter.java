@@ -1,7 +1,6 @@
 package com.semi.DocuHub.global.security.filter;
 
 import com.semi.DocuHub.domain.member.service.MemberService;
-import com.semi.DocuHub.global.jwt.JwtProvider;
 import com.semi.DocuHub.global.rq.Rq;
 import com.semi.DocuHub.global.rsData.RsData;
 import com.semi.DocuHub.global.security.SecurityUser;
@@ -27,7 +26,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
 
         if(
                 request.getRequestURI().equals("/api/v1/members/login") ||
@@ -55,9 +54,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             SecurityUser securityUser = memberService.getUserFromAccessToken(accessToken);
             rq.setLogin(securityUser);
         }
-
         filterChain.doFilter(request, response);
-
     }
 
     // 아래 주석은 frontEnd에서 header에 accessToken을 담아 보낼때 사용하는 코드임

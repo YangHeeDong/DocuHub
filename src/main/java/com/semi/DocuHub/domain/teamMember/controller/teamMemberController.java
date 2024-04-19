@@ -1,16 +1,12 @@
-package com.semi.DocuHub.domain.teamMember.ApiV1TeamMemberController;
+package com.semi.DocuHub.domain.teamMember.controller;
 
 import com.semi.DocuHub.domain.member.entity.Member;
 import com.semi.DocuHub.domain.member.service.MemberService;
-import com.semi.DocuHub.domain.team.dto.TeamDto;
 import com.semi.DocuHub.domain.team.entity.Team;
-import com.semi.DocuHub.domain.team.response.TeamResponse;
 import com.semi.DocuHub.domain.team.service.TeamService;
 import com.semi.DocuHub.domain.teamMember.service.TeamMemberService;
 import com.semi.DocuHub.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

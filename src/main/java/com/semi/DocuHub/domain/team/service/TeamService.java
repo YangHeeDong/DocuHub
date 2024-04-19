@@ -96,13 +96,18 @@ public class TeamService {
             return new MemberDto(teamMember.getTeamMember(), imageService.getImage("member",teamMember.getTeamMember().getId()));
         } ).toList();
 
+        List<MemberDto> inviteMembers = team.getTeamInviteList().stream().map( teamInvite -> {
+            return new MemberDto(teamInvite.getMember(), imageService.getImage("member",teamInvite.getMember().getId()));
+        } ).toList();
+
         return RsData.of("S-1",
                 "팀 조회 성공",
                 new TeamDto(
                         team,
                         teamImg,
                         imageService.getImage("member",team.getTeamAdmin().getId()),
-                        teamMembers
+                        teamMembers,
+                        inviteMembers
                 )
 
         );

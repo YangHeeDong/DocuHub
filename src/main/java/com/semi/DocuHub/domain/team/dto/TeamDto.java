@@ -25,14 +25,17 @@ public class TeamDto {
 
     private List<MemberDto> teamMemberList;
 
+    private List<MemberDto> teamInviteList;
+
     private Image teamImg;
 
-    public TeamDto(Team team, Image teamImg, Image teamAdminImg,List<MemberDto> teamMemberList) {
+    public TeamDto(Team team, Image teamImg, Image teamAdminImg,List<MemberDto> teamMemberList,List<MemberDto> teamInviteList) {
         this.id = team.getId();
         this.teamAdmin = new MemberDto(team.getTeamAdmin(), teamAdminImg);
         this.teamName = team.getTeamName();
         this.teamDescription = team.getTeamDescription();
         this.teamMemberList = teamMemberList;
+        this.teamInviteList = teamInviteList;
         this.teamImg = teamImg;
     }
 

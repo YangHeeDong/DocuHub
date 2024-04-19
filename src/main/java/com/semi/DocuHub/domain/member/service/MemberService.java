@@ -95,7 +95,7 @@ public class MemberService {
 
         String accessToken = jwtProvider.genAccessToken(member.get());
 
-        return RsData.of("S-1","로그인 성공",new MemberResponse.LoginRes(member.get(),accessToken,refreshToken));
+        return RsData.of("S-1","로그인 성공",new MemberResponse.LoginRes(new MemberDto(member.get(), imageService.getImage("member",member.get().getId())),accessToken,refreshToken));
     }
 
     public SecurityUser getUserFromAccessToken(String accessToken) {

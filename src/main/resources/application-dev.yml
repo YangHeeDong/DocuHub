@@ -29,6 +29,6 @@ spring:
       initialize-schema: always
 
 custom:
-#  fileDirPath: D:\work\DocuHub\frontapp\public
-  fileDirPath: D:\GitHub\DocuHub\frontapp\public
+  fileDirPath: D:\work\DocuHub\frontapp\public
+#  fileDirPath: D:\GitHub\DocuHub\frontapp\public
 

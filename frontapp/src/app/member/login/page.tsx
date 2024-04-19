@@ -1,13 +1,14 @@
 "use client";
 
-import useRq from "@/app/utils/rq";
+import api from "@/app/utils/api";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function login() {
+  const queryClient = useQueryClient();
   const [login, setLogin] = useState({ username: "", password: "" });
   const router = useRouter();
-  const rq = useRq();
 
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +38,19 @@ export default function login() {
     if (inputValid() == false) {
       return;
     }
-    await rq.setLogined(login.username, login.password);
+
+    await api
+      .post("/api/v1/members/login", login)
+      .then((res) => {
+        alert(res.data.msg);
+        if (res.data.isSuccess) {
+          queryClient.setQueryData(["loginedMember"], res.data.data.memberDto);
+        }
+        router.replace("/");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (

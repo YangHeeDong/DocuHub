@@ -2,6 +2,7 @@
 
 import api from "@/app/utils/api";
 import MemberDropDown from "@/app/utils/memberDropDown";
+import { TrashIcon } from "@heroicons/react/20/solid";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -47,12 +48,10 @@ export default function createTeam() {
   };
 
   const handlerSearch = async (e) => {
-    console.log("레전드");
     if (e.target.value == "") {
       setSearchMembers([]);
       return;
     }
-    console.log("돌아요~");
 
     await api
       .get("/api/v1/members/search?searchParam=" + e.target.value)
@@ -95,6 +94,30 @@ export default function createTeam() {
   const isAdmin = () => {
     if (member && team && member.id !== team.teamAdmin.id) {
       router.back();
+    }
+  };
+
+  const handlerInvite = async (memberId: string) => {
+    if (team.teamMemberList.filter((member) => member.id == memberId)[0]) {
+      alert("이미 팀 멤버입니다.");
+      return;
+    }
+
+    if (!confirm("초대 요청을 보내시겠습니까?")) {
+      return;
+    }
+
+    await api
+      .post("/api/v1/teamInvite", { memberId: memberId, teamId: team.id })
+      .then((res) => {
+        alert(res.data.msg);
+        getTeamById();
+      });
+  };
+
+  const handlerInviteDelete = (memberId: string) => {
+    if (!confirm("해당 요청을 삭제하시겠습니까?")) {
+      return;
     }
   };
 
@@ -159,7 +182,6 @@ export default function createTeam() {
                       {team.teamAdmin.id === member.id ? "Admin" : "Member"}
                       <MemberDropDown
                         memberId={member.id}
-                        memberName={member.username}
                         handlerAdmin={handlerAdmin}
                         handlerDelete={handlerDelete}
                       />
@@ -177,7 +199,7 @@ export default function createTeam() {
               <label className="input input-bordered flex items-center gap-2">
                 <input
                   type="text"
-                  className="grow"
+                  className="grow w-1/3"
                   placeholder="Search"
                   onChange={handlerSearch}
                 />
@@ -197,15 +219,26 @@ export default function createTeam() {
             </div>
             <div className="card-body overflow-auto h-60 gap-3">
               {searchMembers.map((member) => (
-                <a href="#" className="flex items-center" key={member.id}>
-                  <img
-                    className="h-10 w-10 object-cover rounded-full border me-2"
-                    id="preview"
-                    src={member?.memberImgPath}
-                    alt="MemberProfile"
-                  />
-                  {member.username}
-                </a>
+                <div
+                  className="flex justify-between items-center"
+                  key={member.id}
+                >
+                  <div className="flex items-center">
+                    <img
+                      className="h-10 w-10 object-cover rounded-full border me-2"
+                      id="preview"
+                      src={member?.memberImgPath}
+                      alt="MemberProfile"
+                    />
+                    {member.username}
+                  </div>
+                  <button
+                    onClick={() => handlerInvite(member.id)}
+                    className="btn btn-outline btn-sm"
+                  >
+                    invite
+                  </button>
+                </div>
               ))}
             </div>
           </div>
@@ -214,7 +247,28 @@ export default function createTeam() {
             <div className=" flex items-center justify-center text-center border-b-2 py-3 text-2xl font-bold">
               초대 중 인 회원
             </div>
-            <div className="card-body overflow-auto h-60">123</div>
+            <div className="card-body overflow-auto h-60">
+              {team &&
+                team.teamInviteList.map((member) => (
+                  <div
+                    className="flex justify-between items-center justify-between"
+                    key={member.id}
+                  >
+                    <div className="flex items-center">
+                      <img
+                        className="h-10 w-10 object-cover rounded-full border me-2"
+                        id="preview"
+                        src={member?.memberImgPath}
+                        alt="MemberProfile"
+                      />
+                      {member.username}
+                    </div>
+                    <button onClick={() => handlerInviteDelete(member.id)}>
+                      <TrashIcon className="w-5 fill-red-500 " />
+                    </button>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>

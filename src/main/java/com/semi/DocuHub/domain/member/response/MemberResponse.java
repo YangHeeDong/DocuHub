@@ -27,8 +27,8 @@ public class MemberResponse {
         private String accessToken;
         private String refreshToken;
 
-        public LoginRes(Member member, String accessToken, String refreshToken){
-            this.memberDto = new MemberDto(member);
+        public LoginRes(MemberDto memberDto, String accessToken, String refreshToken){
+            this.memberDto = memberDto;
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }

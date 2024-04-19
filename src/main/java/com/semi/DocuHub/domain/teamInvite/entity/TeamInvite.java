@@ -1,0 +1,26 @@
+package com.semi.DocuHub.domain.teamInvite.entity;
+
+import com.semi.DocuHub.domain.member.entity.Member;
+import com.semi.DocuHub.domain.team.entity.Team;
+import com.semi.DocuHub.global.jpa.BaseEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
+public class TeamInvite  extends BaseEntity {
+
+    @ManyToOne
+    private Team team;
+
+    @ManyToOne
+    private Member member;
+
+}

@@ -8,14 +8,12 @@ function classNames(...classes) {
 
 type GreetingsProps = {
   memberId: number;
-  memberName: string;
   handlerAdmin: Function;
   handlerDelete: Function;
 };
 
 const MemberDropDown = ({
   memberId,
-  memberName,
   handlerAdmin,
   handlerDelete,
 }: GreetingsProps) => {
