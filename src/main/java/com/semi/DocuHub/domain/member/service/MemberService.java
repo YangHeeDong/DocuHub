@@ -1,5 +1,6 @@
 package com.semi.DocuHub.domain.member.service;
 
+import com.semi.DocuHub.domain.image.entity.Image;
 import com.semi.DocuHub.domain.image.service.ImageService;
 import com.semi.DocuHub.domain.member.dto.MemberDto;
 import com.semi.DocuHub.domain.member.entity.Member;
@@ -8,6 +9,7 @@ import com.semi.DocuHub.domain.member.request.MemberRequest;
 import com.semi.DocuHub.domain.member.response.MemberResponse;
 import com.semi.DocuHub.global.email.EmailService;
 import com.semi.DocuHub.global.jwt.JwtProvider;
+import com.semi.DocuHub.global.rq.Rq;
 import com.semi.DocuHub.global.rsData.RsData;
 import com.semi.DocuHub.global.security.SecurityUser;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,7 @@ public class MemberService {
     private final JwtProvider jwtProvider;
     private final EmailService emailService;
     private final ImageService imageService;
+    private final Rq rq;
 
     @Transactional
     public RsData save(MemberRequest.SignupReq signupReq, MultipartFile profileImg) throws IOException {
@@ -164,5 +167,25 @@ public class MemberService {
         List<Member> members = memberRepository.findByUsernameContaining(searchParam);
 
         return members.stream().map( member -> { return new MemberDto(member,imageService.getImage("member",member.getId()));}).toList();
+    }
+
+    public RsData edit(MemberRequest.EditReq req, MultipartFile profileImg) {
+
+        Member member = rq.getMember();
+
+        if( req.getPassword() != null || req.getPasswordConfirm() != null){
+            if(!req.getPassword().equals(req.getPasswordConfirm())){
+                return RsData.of("F-1","비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            }
+            member = member.toBuilder().password(passwordEncoder.encode(req.getPassword())).build();
+        }
+
+        if(profileImg != null) {
+            imageService.updateMemberImg(member,profileImg);
+        }
+
+        memberRepository.save(member);
+
+        return RsData.of("S-1","수정 되었습니다.");
     }
 }

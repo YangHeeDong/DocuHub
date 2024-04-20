@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import api from "./api";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import NavbarDropDown from "./navbarDropDown";
 
 const Navbar = () => {
   const router = useRouter();
@@ -67,23 +68,7 @@ const Navbar = () => {
             </Link>
           </div>
         ) : (
-          <div className="flex items-center">
-            <div className="flex items-center">
-              <img
-                className="h-10 w-10 object-cover rounded-full border me-2"
-                id="preview"
-                src={data && data?.memberImgPath}
-                alt="MemberProfile"
-              />
-              {data && data.username}
-            </div>
-            <button
-              onClick={() => mutation.mutate()}
-              className="btn btn-sm btn-ghost "
-            >
-              Logout
-            </button>
-          </div>
+          <NavbarDropDown data={data} onClick={() => mutation.mutate()} />
         )}
       </div>
     </div>

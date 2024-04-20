@@ -22,7 +22,6 @@ public class Message extends BaseEntity {
     @ManyToOne
     private Member receiver;
 
-    private String title;
     private String content;
 
     private Boolean isCheck;

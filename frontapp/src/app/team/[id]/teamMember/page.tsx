@@ -217,7 +217,7 @@ export default function createTeam() {
                 </svg>
               </label>
             </div>
-            <div className="card-body overflow-auto h-60 gap-3">
+            <div className="card-body overflow-auto h-60 gap-4">
               {searchMembers.map((member) => (
                 <div
                   className="flex justify-between items-center"

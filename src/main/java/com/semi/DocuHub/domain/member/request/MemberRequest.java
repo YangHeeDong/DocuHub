@@ -61,4 +61,13 @@ public class MemberRequest {
 
     }
 
+    @Getter
+    public static class EditReq {
+
+        public String password;
+
+        public String passwordConfirm;
+
+    }
+
 }

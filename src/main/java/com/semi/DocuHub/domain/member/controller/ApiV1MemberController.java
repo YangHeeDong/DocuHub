@@ -122,4 +122,18 @@ public class ApiV1MemberController {
         return RsData.of("S-1","조회 성공",new MemberResponse.SearchMemberRes(members));
     }
 
+    @PatchMapping("/edit")
+    public RsData edit(MemberRequest.EditReq req, @RequestParam(name = "profileImg", required = false) MultipartFile profileImg) throws IOException {
+
+        if(req.getPassword() == null && req.getPasswordConfirm() == null && profileImg == null){
+            return RsData.of("S-1","수정 되었습니다.");
+        }
+
+        RsData result = memberService.edit(req, profileImg);
+
+        if(result.getIsFail()) return RsData.of(result.getResultCode(), result.getMsg(),result.getData());
+
+        return RsData.of(result.getResultCode(), result.getMsg());
+    }
+
 }

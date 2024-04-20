@@ -120,4 +120,23 @@ public class ImageService {
         imageRepository.delete(image);
 
     }
+
+
+    @SneakyThrows
+    @Transactional
+    public void updateMemberImg(Member member, MultipartFile profileImg) {
+
+        createFolder("member");
+
+        String originalFileName = profileImg.getOriginalFilename();
+        String filePath = "/member/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath + "/" + filePath);
+        profileImg.transferTo(profileImgFile);
+
+        Image update = imageRepository.findByRelationEntityAndRelationId("member",member.getId()).get();
+
+        update = update.toBuilder().originalFileName(originalFileName).path(filePath).build();
+
+        imageRepository.save(update);
+    }
 }
