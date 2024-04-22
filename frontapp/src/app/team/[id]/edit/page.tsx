@@ -127,13 +127,13 @@ export default function editTeam() {
   }, [team]);
 
   return (
-    <div className="px-24 flex h-100 justify-center align-center my-auto">
+    <div className="mt-24 px-24 flex h-100 justify-center align-center my-auto">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
             <div className="text-3xl font-bold mb-5">DocuHub</div>
             <h2 className=" text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Edit a team
+              Edit team
             </h2>
           </div>
 

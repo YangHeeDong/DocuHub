@@ -40,22 +40,36 @@ const Navbar = () => {
     },
   });
 
+  const handlerTeamCreate = () => {
+    alert("로그인 후 이용해 주세요");
+    router.push("/member/login");
+    return;
+  };
+
   return (
-    <div className="navbar bg-base-100 absolute">
+    <div className="navbar bg-base-100 relative z-50">
       <div className="navbar-start">
         <a href="/" className="btn btn-ghost text-2xl font-bold">
           DocuHub
         </a>
       </div>
       <div className="navbar-center lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <a href="/team">Team</a>
-          </li>
-          <li>
-            <a href="/article">Article</a>
-          </li>
-        </ul>
+        {data === null ? (
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <button onClick={handlerTeamCreate}>Create Team</button>
+            </li>
+          </ul>
+        ) : (
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <a href="/team/create">Create Team</a>
+            </li>
+            <li>
+              <a href="/team">My Teams</a>
+            </li>
+          </ul>
+        )}
       </div>
       <div className="navbar-end me-2">
         {data === null ? (

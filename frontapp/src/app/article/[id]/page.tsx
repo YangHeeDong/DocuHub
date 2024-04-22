@@ -10,6 +10,7 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
 import { Client, IMessage } from "@stomp/stompjs";
+import { useQuery } from "@tanstack/react-query";
 
 export default function articleDetail() {
   const id = useParams().id;
@@ -21,6 +22,10 @@ export default function articleDetail() {
   const textRef = useRef<Editor>(null);
 
   const [stompClient, setStompClient] = useState<Client | null>(null);
+
+  const { isLoading, data } = useQuery({
+    queryKey: ["loginedMember"],
+  });
 
   const handleChangeInput = () => {
     const html = textRef.current?.getInstance().getMarkdown();
@@ -110,47 +115,6 @@ export default function articleDetail() {
     doc.save("filename" + new Date().getTime() + ".pdf");
   };
 
-  const html2pdf = async () => {
-    const html = document.getElementsByClassName(
-      "toastui-editor-contents"
-    )[0] as HTMLElement;
-    //1.html을 들고와서 canvas화
-    const canvas = await html2canvas(html!, { scale: 3 });
-    //2.이미지화
-    const imageFile = canvas.toDataURL("image/png");
-    //3.pdf준비
-    const doc = new jsPDF("p", "mm", "a4");
-    //pdf 가로 세로 사이즈
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-
-    //이미지의 길이와 pdf의 가로길이가 다르므로 이미지 길이를 기준으로 비율을 구함
-    const widthRatio = pageWidth / canvas.width;
-    //비율에 따른 이미지 높이
-    const customHeight = canvas.height * widthRatio;
-    //pdf에 1장에 대한 이미지 추가
-    doc.addImage(imageFile, "png", 0, 0, pageWidth, customHeight);
-    //doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-    //감소하면서 남은 길이 변수
-    let heightLeft = customHeight;
-    //증가하면서 이미지 자를 위치 변수
-    let heightAdd = -pageHeight;
-
-    // 한 페이지 이상일 경우
-    while (heightLeft >= pageHeight) {
-      //pdf페이지 추가
-      doc.addPage();
-      //남은 이미지를 추가
-      doc.addImage(imageFile, "png", 0, heightAdd, pageWidth, customHeight);
-      //남은길이
-      heightLeft -= pageHeight;
-      //남은높이
-      heightAdd -= pageHeight;
-    }
-    //문서저장
-    doc.save("filename" + new Date().getTime() + ".pdf");
-  };
-
   useEffect(() => {
     getMember();
     getArticleById();
@@ -161,10 +125,35 @@ export default function articleDetail() {
     });
 
     client.onConnect = function () {
+      // 구독 활성화
       client.subscribe(`/topic/public/article/${id}`, updateArticle);
+
+      // 연결된 상태에서 메시지 전송
+      if (client.connected) {
+        console.log("1");
+        client.publish({
+          destination: `/app/article/${id}/connect`,
+          body: JSON.stringify({
+            id: id,
+            content: "",
+            memberId: member?.id,
+          }),
+        });
+      }
     };
     client.activate();
     setStompClient(client);
+
+    client.onDisconnect = function () {
+      client.publish({
+        destination: `/app/article/${id}/disconnect`,
+        body: JSON.stringify({
+          id: id,
+          content: "",
+          memberId: member?.id,
+        }),
+      });
+    };
 
     return () => {
       client.deactivate();
@@ -200,7 +189,7 @@ export default function articleDetail() {
   };
 
   return (
-    <div className="px-36 flex justify-center align-center my-auto">
+    <div className="mt-16 px-36 flex justify-center align-center my-auto">
       <div className="card bg-base-100 w-full shadow-xl mt-4">
         <div className="text-center border-b-2 py-3 text-2xl font-bold">
           {article && article.title}

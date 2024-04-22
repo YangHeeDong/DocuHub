@@ -139,7 +139,7 @@ export default function createTeam() {
   }, []);
 
   return (
-    <div className="px-36  h-100 justify-center align-center my-auto ">
+    <div className="mt-16 px-36  h-100 justify-center align-center my-auto ">
       <div className="flex gap-3 h-96">
         <div className="card bg-base-100 w-2/3 shadow-xl">
           <div className=" text-center border-b-2 py-3 text-2xl font-bold">

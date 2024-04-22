@@ -16,9 +16,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryProviders>
           <Navbar />
-          <div className="h-screen">
-            <div className="pt-20">{children}</div>
-          </div>
+          <div className="h-screen">{children}</div>
         </ReactQueryProviders>
       </body>
     </html>

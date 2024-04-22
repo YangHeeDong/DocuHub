@@ -94,8 +94,45 @@ export default function team() {
     word.value = "";
   };
 
+  const handlerAccept = (id: string) => {
+    api.patch("/api/v1/message/teamAccept/" + id).then((res) => {
+      alert(res.data.msg);
+      getMessages(receiverMember.memberId);
+    });
+  };
+  const handlerReject = (id: string) => {
+    api.patch("/api/v1/message/teamReject/" + id).then((res) => {
+      alert(res.data.msg);
+      getMessages(receiverMember.memberId);
+    });
+  };
+
+  const messageParsing = (msg: string, msgId: string) => {
+    if (msg.split(" ")[0] == "TeamInvite") {
+      return (
+        <div>
+          {msg.split(" ")[1]} 팀에서 초대 요청을 보냈습니다.
+          <br />
+          <button
+            className="btn btn-outline btn-sm me-2"
+            onClick={() => handlerAccept(msgId)}
+          >
+            수락
+          </button>
+          <button
+            className="btn btn-outline btn-sm"
+            onClick={() => handlerReject(msgId)}
+          >
+            거절
+          </button>
+        </div>
+      );
+    }
+    return msg;
+  };
+
   return (
-    <div className="px-36 flex align-center my-auto gap-3">
+    <div className="mt-16 px-36 flex align-center my-auto gap-3">
       <div className="card size-full bg-base-100 shadow-xl mb-5 mt-3 w-1/3">
         <div className=" text-center  text-2xl font-bold border-b-2 py-3">
           My Info
@@ -309,7 +346,10 @@ export default function team() {
                                 </div>
                                 <div className="flex justify-end mt-3">
                                   <div className=" border rounded w-fit py-1 px-3 border-blue-500">
-                                    {message.content}
+                                    {messageParsing(
+                                      message.content,
+                                      message.id
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -326,7 +366,10 @@ export default function team() {
                                 </div>
                                 <div className="flex mt-3">
                                   <div className=" border rounded w-fit py-1 px-3 border-green-500">
-                                    {message.content}
+                                    {messageParsing(
+                                      message.content,
+                                      message.id
+                                    )}
                                   </div>
                                 </div>
                               </div>

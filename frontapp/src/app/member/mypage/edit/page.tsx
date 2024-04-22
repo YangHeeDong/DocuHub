@@ -108,7 +108,7 @@ export default function EditMember() {
   }
 
   return (
-    <div className="px-36 flex h-100 justify-center align-center my-auto">
+    <div className="mt-24 px-36 flex h-100 justify-center align-center my-auto">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">

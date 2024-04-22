@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,6 +43,7 @@ public class MessageService {
                 .filter(message -> message.getSender().getId() == member.getId() || message.getReceiver().getId() == member.getId())
                 .map(message -> {
                     return new MessageDto(
+                            message.getId(),
                             new MemberDto(message.getSender(), imageService.getImage("member",message.getSender().getId())),
                             new MemberDto(message.getReceiver(), imageService.getImage("member",message.getReceiver().getId())),
                             message.getContent(),
@@ -65,5 +67,21 @@ public class MessageService {
         }).toList();
 
         return RsData.of("S-1","조회성공", result);
+    }
+
+    public RsData<Message> findById(Long id) {
+        Optional<Message> message = messageRepository.findById(id);
+
+        if(message.isEmpty()){
+            return RsData.of("F-1","존재하지 않는 메세지 입니다.");
+        }
+
+        return RsData.of("S-1","조회성공",message.get());
+    }
+
+    public void update(Message data, String s) {
+        data = data.toBuilder().content(s).build();
+        messageRepository.save(data);
+
     }
 }

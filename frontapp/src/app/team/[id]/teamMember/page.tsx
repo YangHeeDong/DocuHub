@@ -28,6 +28,7 @@ export default function createTeam() {
           id: res.data.data.id,
           username: res.data.data.username,
         });
+        getTeamById();
       })
       .catch(function (error) {
         router.push("/");
@@ -115,23 +116,16 @@ export default function createTeam() {
       });
   };
 
-  const handlerInviteDelete = (memberId: string) => {
-    if (!confirm("해당 요청을 삭제하시겠습니까?")) {
-      return;
-    }
-  };
-
   useEffect(() => {
     isAdmin();
   }, [team]);
 
   useEffect(() => {
     getMember();
-    getTeamById();
   }, []);
 
   return (
-    <div className="px-36  h-100 justify-center align-center my-auto ">
+    <div className="mt-16 px-36  h-100 justify-center align-center my-auto ">
       <div className="flex gap-3">
         <div className="card bg-base-100 w-1/2 shadow-xl">
           <div className=" flex items-center justify-center text-center border-b-2 py-3 text-2xl font-bold">
@@ -263,9 +257,6 @@ export default function createTeam() {
                       />
                       {member.username}
                     </div>
-                    <button onClick={() => handlerInviteDelete(member.id)}>
-                      <TrashIcon className="w-5 fill-red-500 " />
-                    </button>
                   </div>
                 ))}
             </div>
